@@ -17,5 +17,8 @@
 		<div>${message}</div>
 		<input type="submit" value="로그인">
 	</form>
+	<form action="joinForm.jsp" method="post">
+		<input type="submit" value="회원가입"><br>
+	</form>
 </body>
 </html>
