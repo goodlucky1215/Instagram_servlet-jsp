@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MemberDao {
 
@@ -58,9 +62,30 @@ public class MemberDao {
 		
 	}
 
-	public void checkid(Connection con,String id) {
-		// TODO Auto-generated method stub
-		
+	public List<Map<String, Object>> selectArticle(Connection con) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT from jspfile order by fileno desc";
+		List<Map<String, Object>> articles = new ArrayList<>();
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String,Object> art = new HashMap<>();
+				art.put("fileNo",rs.getInt("FILENO"));
+				art.put("fileName",rs.getString("FILENAME"));
+				art.put("memberid",rs.getString("MEMBERID"));
+				art.put("contentText",rs.getString("CONTENTTEXT"));
+				art.put("read_cnt",rs.getString("READ_CNT"));
+				articles.add(art);
+			}
+		} catch(Exception e){
+			
+		}	
+		finally {
+			ConnectionProvider.freeConnection(pstmt,rs);
+		}
+		return articles;
 	}
 
 }

@@ -2,6 +2,9 @@ package member.command;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class LoginService {
 	ConnectionProvider conPro = null;
@@ -20,6 +23,18 @@ public class LoginService {
 			throw new RuntimeException();
 		} finally {
 			conPro.freeConnection(con);//연결은 무조건 끊어주기
+		}
+	}
+	public List<Map<String, Object>> articleList() {
+		List<Map<String, Object>> articles = new ArrayList<>();
+		conPro = ConnectionProvider.getInstance();
+		Connection con = null;
+		try {
+			con = conPro.getConnection();
+			 articles = memberDao.selectArticle(con);
+			 return articles;
+		} finally {
+			conPro.freeConnection(con);
 		}
 	}
 }
