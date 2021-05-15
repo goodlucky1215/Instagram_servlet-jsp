@@ -20,37 +20,47 @@ input:hover {
   margin: 0 auto;
   background: white;
   width: 350px;
-  height: 680px;
+  height: 440px;
   left: 40%;
   margin-top: 40px;
+  margin-bottom: 20px;
   border: 1px solid white;
   border-radius: 5px;
-  padding: 5%;
+  padding: 2%;
 }
-#joinform__shape {
+#join__shape {
+  padding: 10px;
+  margin: 0 auto;
+  background: white;
+  width: 350px;
+  height: 60px;
+  left: 40%;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 2%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#loginform__shape {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
-.joinform__title__logo {
+.loginform__title__logo {
   text-align: center;
   font-size: 40px;
 }
-.joinform__title__text {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bolder;
-  color: gray;
-}
-.joinform__input {
+.loginform__input {
   width: 100%;
   background: rgba(var(--b3f, 250, 250, 250), 1);
   border: 0;
   margin: 0;
   padding: 9px 0 7px 8px;
 }
-#signBtn {
+.loginbtn {
   text-align: center;
   font-size: 18px;
   font-weight: bolder;
@@ -59,36 +69,17 @@ input:hover {
   background: rgb(0, 174, 255);
   border: 0;
   padding: 9px 0 7px 8px;
-}
-
-#main__shape__success {
-  padding: 10px;
-  margin: 0 auto;
-  background: white;
-  width: 350px;
-  height: 200px;
-  left: 40%;
-  margin-top: 40px;
-  border: 1px solid white;
   border-radius: 5px;
-  padding: 3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
-.main__shape__success__text {
+.joinbtn {
   text-align: center;
-  font-size: 25px;
-  font-weight: bolder;
-  color: gray;
-}
-.main__shape__success__btn {
-  text-align: center;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bolder;
   color: white;
-  width: 100%;
+  width: 30%;
+  margin: 0 auto;
   background: rgb(0, 174, 255);
-  border: 0;
-  padding: 9px 0 7px 8px;
+  border: 1px solid white;
+  padding: 8px 0 8px 6px;
+  border-radius: 5px;
 }

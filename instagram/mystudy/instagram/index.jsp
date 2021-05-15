@@ -25,7 +25,7 @@
  	 %>
  	 	<div> 기사 </div>
  	 	<div> <%= art.get("fileNo") %></div>
- 	 	<div> <img src=<%= directory+art.get("fileName") %> /></div>
+ 	 	<div> <img src="<%= directory+art.get("fileName") %>" /></div>
  	 	<div> <%= art.get("memberid") %></div>
  	 	<div> <%= art.get("contentText") %></div>
  	 	<div> <%= art.get("read_cnt") %></div>

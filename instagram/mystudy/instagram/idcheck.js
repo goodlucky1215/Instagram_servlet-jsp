@@ -12,11 +12,13 @@ function idcheck(){
     data:{id:id},
     success: function(data, textStatus){
       if(data === 'usable'){
-        $('#message').text('사용할 수 있는 ID입니다.')
-        $('#signBtn').prop('disabled', false)
+		$('.message').removeClass("error");
+        $('#message').text('사용할 수 있는 ID입니다!!');
+        $('#signBtn').prop('disabled', false);
       } else {
-        $('#message').text('이미 사용 중인 아이디입니다.')
-        $('#signBtn').prop('disabled', true)
+        $('.message').addClass("error");
+        $('#message').text('이미 사용 중인 아이디입니다.');
+        $('#signBtn').prop('disabled', true);
       }
     },
     error:function(data,textStatus){
