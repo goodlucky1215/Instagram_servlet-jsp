@@ -43,9 +43,7 @@ public class LoginHandler implements CommandHandler {
 		//둘 다 입력했다면 이제 찾기 시작
 		try {
 			User user = loginservice.login(id, password);
-			List<Map<String,Object>> articles = loginservice.articleList();
 			req.getSession().setAttribute("authUser", user); //유저 아이디와 이름 저장
-			req.getSession().setAttribute("articles", articles); //글들 전부 불러오기
 			res.sendRedirect("/mystudy/instagram/index.jsp");
 			return null;
 		} catch (LoginFailException e) {
