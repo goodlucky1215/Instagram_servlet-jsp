@@ -14,7 +14,6 @@
 </head>
 
 <body action="index.do" method="post">
-  <% if(session.getAttribute("authUser")!=null) { %>
 	<header id="header__shape">
 	    <div  id="header__shape__width">
 	      <h2 class="header__text__font">
@@ -38,8 +37,7 @@
  	   <section id="articles__shape">
 
   		</section>
- <% } else { %>
- 	  <form action="index.jsp" method="post">
- <% } %>
+
+
 </body>
 </html>
