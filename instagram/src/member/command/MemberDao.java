@@ -1,5 +1,6 @@
 package member.command;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,18 +58,22 @@ public class MemberDao {
 			pstmt.executeUpdate();
 			System.out.println(pstmt);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 	}
 
-	public List<Map<String, Object>> selectArticle(Connection con) {
+	public List<Map<String, Object>> selectArticle(Connection con,String memberId,String text) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT from jspfile order by fileno desc";
+		String findtext="%"+text+"%";
+	//고민 많았던걸로 쓰기!
+		String sql = "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT, case when fileno in (select  jf.FILENO from jspfile jf,JSPHEART jt where  jf.FILENO=(JT.FILENO) and JT.MEMBERID=?) then '1' else '0' end heart from JSPFILE WHERE CONTENTTEXT LIKE ? order by fileno desc";
 		List<Map<String, Object>> articles = new ArrayList<>();
+		System.out.println(memberId+findtext);
 		try {
 			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberId);
+			pstmt.setString(2, findtext);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Map<String,Object> art = new HashMap<>();
@@ -77,6 +82,7 @@ public class MemberDao {
 				art.put("memberid",rs.getString("MEMBERID"));
 				art.put("contentText",rs.getString("CONTENTTEXT"));
 				art.put("read_cnt",rs.getString("READ_CNT"));
+				art.put("heart",rs.getString("heart"));
 				articles.add(art);
 			}
 		} catch(Exception e){
