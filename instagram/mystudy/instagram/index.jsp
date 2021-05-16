@@ -4,33 +4,40 @@
 <%@page import="java.util.Map"%>
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title> </title>
+  <meta charset="UTF-8">
+  <title>화면</title>
+  <link rel="stylesheet" href="articleView.css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" defer src="articleView.js?v=<%=System.currentTimeMillis()%>"></script>
 </head>
-<body>
+
+<body action="index.do" method="post">
   <% if(session.getAttribute("authUser")!=null) { %>
- 	 ${authUser.name}님, 안녕하세요!
-  	<form action="logout.do" method="post">
-			<input type="submit" value="로그아웃">
- 	 </form>
- 	 <form action="newArticleForm.jsp" method="post">
-			<input type="submit" value="글 올리기">
- 	 </form>
- 	 <% 
- 	 	if(session.getAttribute("articles")!=null){
- 	 	String directory = "/upload/"; //파일을 불러올 때는 경로를  상대적인 경로로 해줘야한다!
- 		List<Map<String,Object>> articles = (List<Map<String,Object>>)session.getAttribute("articles");
- 	 	for(Map<String,Object> art:articles){
- 	 %>
- 	 	<div> 기사 </div>
- 	 	<div> <%= art.get("fileNo") %></div>
- 	 	<div> <img src="<%= directory+art.get("fileName") %>" /></div>
- 	 	<div> <%= art.get("memberid") %></div>
- 	 	<div> <%= art.get("contentText") %></div>
- 	 	<div> <%= art.get("read_cnt") %></div>
- 	 <% } 
- 	 }%>
+	<header id="header__shape">
+	    <div  id="header__shape__width">
+	      <h2 class="header__text__font">
+	        Instagram
+	      </h2>
+	        <div class="header__text__find__input">
+	          <input type="text" class="header__text__find__input__findtext" name="findtext">
+	          <input type="submit" class='btn header__text__find__input__btn' onclick="findtext()" value="검색">
+	        </div>
+	      <div class="header__text">
+	        ${authUser.name}님, 안녕하세요!
+	      </div>
+	      <form action="logout.do" method="post">
+	        <input type="submit" class='btn' value="로그아웃">
+	      </form>
+	      <form action="newArticleForm.jsp" method="post">
+	        <input type="submit" class='btn' value="글 올리기">
+	      </form>
+	    </div>
+	  </header>
+ 	   <section id="articles__shape">
+
+  		</section>
  <% } else { %>
  	  <form action="index.jsp" method="post">
  <% } %>
