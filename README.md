@@ -241,3 +241,55 @@ public class checkidHandler implements CommandHandler{
 }
 ```
 
+------------
+
+### [UploadHandler.java] 사진 업로드
+```java
+
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.MultipartRequest;
+
+private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
+		//사진을 저장할 경로를 설정 -
+	  //req.getSession().getServletContext()를 하면 웹어플리케이션 상의 절대 경로를 가져올 수 있다.
+    //그리고 파일을 넣을 "/upload/"까지 담아준다.
+		String directory = req.getSession().getServletContext().getRealPath("/upload/");
+		System.out.println(directory);
+		int maxSize = 1024*1024*100; //사진의 최대크기 지정
+		String encoding = "UTF-8"; //한글도 문제없이 처리하게끔 처리
+		FileVO filevo = new FileVO();
+		MultipartRequest multipartRequest = null;
+//MultipartRequest파일 업로드를 실행하는 역할을 한다.
+		try {
+			multipartRequest = new MultipartRequest(req, directory, maxSize, encoding, new DefaultFileRenamePolicy());
+//enctype="multipart/form-data"와 req로 인해서 파일이 업로드 됨.
+//new DefaultFileRenamePolicy() => 사용자가 올리는 파일들 중에서 이름이 똑같은 파일이 존재하는 경우
+// 자동으로 파일 이름을 바꾸어주는 역할을 해준다.
+//초기화를 이용해서 바로 파이 전송을 수행
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		User user = (User) req.getSession().getAttribute("authUser");
+		filevo.setMEMBERID(user.getId());
+		//보내는 form에서 enctype="multipart/form-data"를 사용하게 되면 req.getParameter로 값을 받아오지 못 한다.
+		//MultipartRequest multipartRequest에 값이 다 담겨져 온다.("content","file"이 name으로 jsp에 지정해둠.)
+		filevo.setContentText(multipartRequest.getParameter("content")); 
+		System.out.println(multipartRequest.getParameter("content"));
+		filevo.setFileRealName(multipartRequest.getOriginalFileName("file"));
+		filevo.setFileName(multipartRequest.getOriginalFileName("file"));
+		if(filevo.getFileRealName()==null) {
+			req.setAttribute("message","글은 쓰지 않더라도 사진은 넣어주세요!");
+			return "newArticleForm.jsp"; 
+		}
+		new FileDao().fileInsert(filevo);
+		try {
+			res.sendRedirect("/mystudy/instagram/index.jsp"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+```
+
