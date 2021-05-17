@@ -1,5 +1,13 @@
-# Instagram_servlet-jsp
-##[web.xml 파일 안] 
+# [Instagram_servlet-jsp_인스타그램 만들기]
+## 이 프로젝트의 목표 
+> 1. jsp와 servlet의 전체적으로 돌아가는 과정을 이해, web.xml 사용법 + 세션 맛보기
+> 2. ajax 사용해보기
+> 3. 오라클에서 데이터를 받아와서 json형태로 변환 후, 사용해보기
+> 4. 사진(cos.jar 사용)이랑 글 올리기
+
+------------
+
+### [web.xml 파일 안] 
 ```xml
 <servlet> // <-- 이렇게 하면 서블릿 클래스를 등록하는 것임
   	<servlet-name>ControllerUsingURI</servlet-name> //<--해당 서블릿을 참조할 때 사용할 이름
@@ -9,7 +17,7 @@
      
 
 		//이거에 대한 설명은 ControllerUsingURI.java안에 있다.
-		<init-param>
+	<init-param>
   		<param-name>configFile</param-name>
   		<param-value>
   			/WEB-INF/classes/commandHandlerURI.properties
@@ -18,27 +26,39 @@
 
 		//보통 초기화 작업은 시간이 오래 걸린다. 처음 서블릿을 사용하는 시점보다 웹 컨테이너를
 		//처음 구동하는 시점에 초기화를 진행하는 것이 좋다. 
-    //--->이를 위한 작업이 <load-on-startup>1</load-on-startup>
-  	//508p - 17.4 그림확인
-	  //즉, 톰캣을 구동하는 시점에서 서블릿 객체를 생성하고, init()메서드를 실행한다.
+    		//--->이를 위한 작업이 <load-on-startup>1</load-on-startup>
+	        //즉, 톰캣을 구동하는 시점에서 서블릿 객체를 생성하고, init()메서드를 실행한다.
 		//그리고 내가 웹을 키면 커넥션 풀을 초기화하므로, JSP나 서블릿 코드에서 커넥션 풀을 사용.
 		<load-on-startup>1</load-on-startup>
      // 이 1은 순서를 의미 - 여러 servlet이 존재할때 로딩 순서를 이 숫자로 결정할 수 있다.
 
   </servlet>
   
-  <servlet-mapping> //해당 서블릿이 어떤 URL을 처리할지 대한 매핑 정보를 등록하는 것이다.
+  <servlet-mapping> //해당 서블릿이 어떤 URL을 처리할지 대한 매핑 정보를 등록(url의 이름을 servlet이 보는 이름으로 바꿔서 넣어준것)하는 것이다.
   	<servlet-name>ControllerUsingURI</servlet-name> //매핑할 서블릿의 이름을 지정
   	<url-pattern>*.do</url-pattern> 
     //매핑할 URL패턴을 지정한다. *.do는 .do가 들어간 URl을 전부 매핑
   </servlet-mapping>
+
+ <filter> <!-- 필터는 클라와 내가 들어가려는 서블릿 그 사이에 존재해서 한 번 필터링(예를 들어 로그인 하고 들어왔는지 아닌지 체크한다던가)을 해주는 것임. -->
+  	<filter-name>LoginCheckFilter</filter-name><!-- 내가 사용하려는 필터링 이름 -->
+  	<filter-class>member.command.LoginCheckFilter</filter-class> <!-- 사용하는 필터링 클래스 위치 -->
+  </filter>
+  <filter-mapping>
+  	<filter-name>LoginCheckFilter</filter-name> <!-- 만약 같은 url-pattern을 여러게 필터 처리하면 순서대로 필터링을 거치고 화면을 받아온다 -->
+  	<url-pattern>/mystudy/instagram/index.jsp</url-pattern> <!-- 내가 mainview를 킬때마다 로그인 되어 있는지 확인 -->
+  	<url-pattern>/mystudy/instagram/upload.do</url-pattern> <!-- 내가 새로운 게시글을 올릴 때마다 로그인 되어 있는지 확인 -->
+  	<dispatcher>REQUEST</dispatcher> <!-- 이게 디폴트로 클라가 요청할때마다 필터를 낀 후에 서블릿이 동작하도록 해준다. -->
+  </filter-mapping>
 //properties안 에는 
 //mystudy/gasipan/join.do=member.command.JoinHandler2 이렇게 들어가 있다. 따라서,
 //결과적으로 ControllerUsingURI는 /mystudy/Instagram/join.do 이 들어가있는 URL을 처리하게 된다!
 //즉, http://localhost:9000/mystudy/Instagram/join.do 얘를 처리하는 것임.
 ```
 
-##**[member.command.ControllerUsingURI.java 안] - 즉 서블릿에서 사용된 클래스**
+------------
+
+### [member.command.ControllerUsingURI.java 안] - commandController 모든 요청은 여기서 한 번에 받지만, 처리는 각자 보내진 서블릿 안에서 처리함.
 ```java
 public void init() throws ServletException{ //init()은 서블릿을 초기화 할 때 사용
 	  String confingFile = getInitParameter("configFile");
@@ -97,11 +117,11 @@ public void doGet(HttpServletRequest request,HttpServletResponse response)
 		//왜냐면 joinForm.jsp안에  <form **action="join.do"** method="post"> 로 되있기 때문
 		System.out.println(command);// /mystudy/Instagram/join.do
 		if(command.indexOf(request.getContextPath())==0) {
-			//시작점 위치를 시작으로 경로가 같다면 (즉 시점의 index가 그러면 0일테니까, 안으로 들어옴.)
-	    //request.getContextPath() 함수는 = **프로젝트 Path만**
-      //ex)http://localhost:8080/project/list.jsp  ---> /project 이 부분을 가져온다.
-			//contextpath는 server.xml 경로와 관련이 있으므로
-	    //server.xml에 path=""으로 되어있다면 request.getContextPath()=""이 된다.
+		//시작점 위치를 시작으로 경로가 같다면 (즉 시점의 index가 그러면 0일테니까, 안으로 들어옴.)
+	        //request.getContextPath() 함수는 = **프로젝트 Path만**
+      		//ex)http://localhost:8080/project/list.jsp  ---> /project 이 부분을 가져온다.
+		//contextpath는 server.xml 경로와 관련이 있으므로
+	        //server.xml에 path=""으로 되어있다면 request.getContextPath()=""이 된다. - 항상 경로는 무조건 확인할 것
 			command = command.substring(request.getContextPath().length())
 
 			System.out.println(command);// /mystudy/Instagram/join.do
@@ -137,14 +157,15 @@ public void doGet(HttpServletRequest request,HttpServletResponse response)
 	}
 ```
 
-##[로그인으로 알아보는 세션]
-###LoginHandler.java 파일임.
+------------
+
+### [LoginHandler.java 파일임.]-로그인으로 알아보는 세션
 ```java
 try {
-	//데이터베이스에서 로그인 아이디와 비밀번호임을 확인하고 만약 맞아다고 가정한다면.
+	//데이터베이스에서 로그인 아이디와 비밀번호임을 확인하고 만약 맞다고 가정한다면.
 			User user = loginservice.login(id, password);
-  //getSession()메서드는 서버에 생성된 세션이 있다면 세션을 반환하고, 없다면 세 세션을 생성하여 반환
-  //getSession().setAttribute("authUser", user) 세션에다가 값을 저장한다는 것이다.
+ 	//getSession()메서드는 서버에 생성된 세션이 있다면 세션을 반환하고, 없다면 세 세션을 생성하여 반환 - 디폴트 값이 true임.
+	//getSession().setAttribute("authUser", user) 세션에다가 값을 저장한다는 것이다. -즉 서버에 저장(캐시) - redirect를 해도 날라가지 않겠다!!
 			req.getSession().setAttribute("authUser", user);
 			res.sendRedirect("/mystudy/Instagram/index.jsp");
 			return null;
@@ -153,15 +174,17 @@ try {
 			return  FORM_VIEW;
 		}
 ```
-###LogoutHandler.java 파일임.
+
+------------
+
+### [LogoutHandler.java 파일임.]-세션 반납.
+
 ```java
 @Override
 	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HttpSession session = req.getSession(false);
-//req.getSession(false); 은 session이 존재하면 값을 반환하고, 존재하지 않으면 굳이 새로운 세션을
-//생성하지 않겠다는 것임
-//역으로 req.getSession(true);는 session이 존재하면 값을 반환하고, 존재하지 않으면 새로운 세션을
-//생성하겠다는 것임. 
+	//req.getSession(false);로 입력시, session이 존재하면 값을 반환하고, 존재하지 않으면 굳이 새로운 세션을 생성하지 않겠다는 것임
+	//역으로 req.getSession(true); == req.getSession();로 입력시, session이 존재하면 값을 반환하고, 존재하지 않으면 새로운 세션을 생성하겠다는 것임. 
 		if(session!=null) {
 			session.invalidate(); //세션을 반환한다.
 		}
