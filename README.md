@@ -3,7 +3,7 @@
 > 1. jsp와 servlet의 전체적으로 돌아가는 과정을 이해, web.xml 사용법 + 세션 맛보기
 > 2. ajax 사용해보기
 > 3. 오라클에서 데이터를 받아와서 json형태로 변환 후, 사용해보기
-> 4. 사진(cos.jar 사용)이랑 글 올리기
+> 4. 이미지(cos.jar 사용)랑 글 올리기
 
 ------------
 
@@ -240,10 +240,109 @@ public class checkidHandler implements CommandHandler{
 
 }
 ```
+------------
+
+### [articleView.js]  json사용하기-모든 article 다 가져오기
+```javascript
+'use strict'
+let section = document.querySelector('section');
+window.onload=function(){
+	articleList();
+}
+function articleList(){
+  $.ajax({
+    type: 'post', // 서버에게 보내는 방식
+    url: 'index.do', //서버가 받는 url
+    dataType:'json', //서버로부터 내가 받는 데이터 타입
+    success: function(data){
+      showHeroes(data); //data안에 json 형태로 받아와서 뿌려준다.
+    },
+    error:function(data){
+      console.log('error');
+    }
+  })
+}
+function showHeroes(jsonObj) {
+  for (let i = 0; i < jsonObj.length; i++) {
+    let articles__shape__width = document.createElement('div');
+    articles__shape__width.className="articles__shape__width";
+    let articlesbox = document.createElement('div');
+    articlesbox.className='articles__box';
+    let articlesid = document.createElement('div');
+    articlesid.className="articles__id";
+    let articlesidtext = document.createTextNode(`👤 ${jsonObj[i]['memberid']}`);
+    articlesid.appendChild(articlesidtext);
+    let articlesimg = document.createElement('img');
+    articlesimg.className="src";
+    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`
+    articlesimg.className="articles__img";
+    let articlesbottom = document.createElement('div');
+    articlesbottom.className="articles__bottom";
+    let articlesbottomheart = document.createElement('div');
+	let articlesbottomhearttext = document.createTextNode("🤍")
+	if(`${jsonObj[i]['heart']}`==='1') {articlesbottomhearttext = document.createTextNode("💗");}
+    articlesbottomheart.appendChild(articlesbottomhearttext);
+    articlesbottomheart.className="articles__bottom__heart";
+    let articlesbottomheartnum = document.createElement('div');
+    let articlesbottomheartnumtext = document.createTextNode(`${jsonObj[i]['read_cnt']}`);
+    articlesbottomheartnum.appendChild(articlesbottomheartnumtext);
+    articlesbottomheartnum.className="articles__bottom__heart__num";
+    let articlesbottomtext = document.createElement('div');
+    let articlesbottomtexttext = document.createTextNode(`${jsonObj[i]['contentText']}`);
+    articlesbottomtext.appendChild(articlesbottomtexttext);
+    articlesbottomtext.className="articles__bottom__text";
+    let articlesspace = document.createElement('div');
+    articlesspace.className="articles__space";
+
+    articlesbottom.appendChild(articlesbottomheart);
+    articlesbottom.appendChild(articlesbottomheartnum);
+    articlesbottom.appendChild(articlesbottomtext);
+    articlesbox.appendChild(articlesid);
+    articlesbox.appendChild(articlesimg);
+    articlesbox.appendChild(articlesbottom);
+    articlesbox.appendChild(articlesspace);
+    articles__shape__width.appendChild(articlesbox);
+    section.appendChild(articles__shape__width);
+    document.querySelectorAll('.articles__bottom__heart')[i].setAttribute('onclick',"heartClick(this.id)");
+    document.querySelectorAll('.articles__bottom__heart')[i].setAttribute('id',`${jsonObj[i]['fileNo']}`);
+    document.querySelectorAll('.articles__bottom__heart__num')[i].setAttribute('id',`num__${jsonObj[i]['fileNo']}`);
+  }
+}
+```
+### [articleView.js] json사용하기-모든 article 다 가져오기
+```java
+
+import com.google.gson.Gson;
+
+private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		HttpSession session = req.getSession();  
+		User user = (User) session.getAttribute("authUser"); //사용자 아이디를 세션으로 가져옴.
+    //사용자 아이디를 받아서 사용자가 표시한 하트를 표시 해 주기 위해서.
+	  //List<Map>으로 게시글들 데이터들을 전부 담기
+		List<Map<String,Object>> articles = loginservice.articleList(user.getId(),"_");
+        //req.setAttribute("articles", articles);
+       
+        //타입을 json으로 바꿔줘야됨 -res가 타입을 결정하는 역할을 하니까.
+        //res.setContentType("application/json");
+        //res.setCharacterEncoding("UTF-8"); //한글도 문제 없이 처리해주기
+       
+        //json 형태의 string으로 바꿔준다.
+        String gson = new Gson().toJson(articles);
+		//둘 다 입력했다면 이제 찾기 시작
+		try {
+            //ajax의 data안에 이게 들어감.
+            res.getWriter().write(gson);
+			return null;
+		} catch (LoginFailException e) {	
+			return  FORM_VIEW;
+		}
+	}
+
+```
 
 ------------
 
-### [UploadHandler.java] 사진 업로드
+### [MainVeiwHandler.java] 이미지 업로드 하기
 ```java
 
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
