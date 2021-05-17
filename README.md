@@ -4,7 +4,8 @@
 > 2. ajax 사용해보기
 > 3. 오라클에서 데이터를 받아와서 json형태로 변환 후, 사용해보기
 > 4. 이미지(cos.jar 사용)랑 글 올리기
-
+> 5. 트러블 슈팅
+> 6. 배운 점
 ------------
 
 ### [web.xml 파일 안] 
@@ -392,3 +393,33 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
 	}
 ```
 
+------------
+
+### [트러블 슈팅]
++ <script type="text/javascript" defer src="upload.js?v=<%=System.currentTimeMillis()%>"></script>
+ ```
+ -서버를 가져오면 내가 고친 javascript로 가져오지 않는 현상이 발생
+ -개발자 도구에서 source를 확인해보게 되었다. javascript가 바꾼 상태로 안 바뀌어져있음을 확인.
+ -?v=<%=System.currentTimeMillis()%> 가 현재의 시간을 실시간으로 반영시켜서 해결
+ ```
+ +게시글들 전부 불러오기 sql, 찾는 글이 있는 게시글 불러오기
+ ```
+ "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT
+        , case when fileno in ( select jf.FILENO
+	                        from jspfile jf,JSPHEART jt
+				where  jf.FILENO=(JT.FILENO) and JT.MEMBERID=?) then '1'
+	   else '0' end heart 
+ from JSPFILE WHERE CONTENTTEXT LIKE ? order by fileno desc"
+ 1. 사용자 a가 누른 좋아요 게시물들 확인하는게 어려웠음. case when안에 서브쿼리를 사용하여 해결
+ 2. 찾는 글이 있는 게시글만 가져오려고 했는데 LIKE %?% 로 처음에 작성함.
+    2-1. 계속 아무 게시글도 뜨지가 않음.
+    2-2. String findtext="%"+text+"%"; pstmt.setString(2, findtext);
+         -> "%"까지 포함시켜서 찾아줘야함을 알게됨
+ ```
+ +이미지 올리고 text올리기
+ ```
+ -req.getParameter("content") 내가 name="content"로 쓴 글을 넣었는데 계속 null값으로 값을 못 받아돔.
+ -MultipartRequest 사용시 이미지 뿐만 아니라 다른 값들도 여기에 들어가게 됨.
+ -multipartRequest.getParameter("content")을 사용해서 문제 해결.
+ ```
+ 
