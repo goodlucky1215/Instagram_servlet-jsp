@@ -191,3 +191,53 @@ try {
 		res.sendRedirect("/mystudy/Instagram/login.jsp"); //로그인 페이지로 돌아간다.
 	}
 ```
+
+------------
+
+### [idcheck.js] 회원가입 시 로그인 아이디 중복 확인(비동기-Jquery-Ajax)
++ 비동기란 프로그램의 흐름과 무관하게 이벤트를 발생시키는 것, ajax는 그래서 화면의 일부만 로드하는 것임
+```javascript
+"use strict"
+function idcheck(){ //화원가입 id를 입력 중복확인을 위한 이 loop가 돌아감.
+  const id = $('input[name=id]').val();
+  if(id.length<=0){
+	$('#message').text('') //아무것도 입력하지 않았다면 text를 비워준다.
+	return;
+  }	
+  $.ajax({
+    type: 'post', //보낼 때 방식
+    url: 'checkid.do', //서버에서 받을 때 인식할 url
+    dataType:'text', //서버로부터 내가 받는 데이터 타입
+    data:{id:id}, //내가 입력한 id라는 데이터를 id라는 이름으로 서버에게 넘겨줌. -req안에 들어감.
+    success: function(data, textStatus){ //이 data안에 내가 서버로부터 받는 값이 들어가 있음!!
+      if(data === 'usable'){
+        $('#message').text('사용할 수 있는 ID입니다.')
+        $('#signBtn').prop('disabled', false)
+      } else {
+        $('#message').text('이미 사용 중인 아이디입니다.')
+        $('#signBtn').prop('disabled', true)
+      }
+    },
+    error:function(data,textStatus){
+      console.log('error');
+    }
+
+  })
+}
+```
+### [checkidHandler-Ajax] 회원가입 시 로그인 아이디 중복 확인(비동기-Jquery-Ajax)
+```java
+public class checkidHandler implements CommandHandler{
+	private JoinService joinService = new JoinService();
+	@Override
+	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		PrintWriter out = res.getWriter();
+		String id = req.getParameter("id"); //ajax에서 넣어줬던 값을 가져옴.
+		boolean boolId = joinService.checkid(id); //존재하는 아이디인지 DB에서 체크 후 가지고 나옴
+		if(boolId==true) out.print("usable"); //아이디가 존재 안한다는 의미의 "usable"로 success: function(data)에서 data안에 들어가고,
+		else out.print("able"); //아이디가 존재한다의 "able"로 success: function(data)에서 data안에 들어감.
+	}
+
+}
+```
+
