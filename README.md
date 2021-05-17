@@ -402,7 +402,7 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
  -개발자 도구에서 source를 확인해보게 되었다. javascript가 바꾼 상태로 안 바뀌어져있음을 확인.
  -?v=<%=System.currentTimeMillis()%> 가 현재의 시간을 실시간으로 반영시켜서 해결
  ```
- +게시글들 전부 불러오기 sql, 찾는 글이 있는 게시글 불러오기
+ + 게시글들 전부 불러오기 sql, 찾는 글이 있는 게시글 불러오기
  ```
  "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT
         , case when fileno in ( select jf.FILENO
@@ -416,7 +416,7 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
     2-2. String findtext="%"+text+"%"; pstmt.setString(2, findtext);
          -> "%"까지 포함시켜서 찾아줘야함을 알게됨
  ```
- +이미지 올리고 text올리기
+ + 이미지 올리고 text올리기
  ```
  -req.getParameter("content") 내가 name="content"로 쓴 글을 넣었는데 계속 null값으로 값을 못 받아돔.
  -MultipartRequest 사용시 이미지 뿐만 아니라 다른 값들도 여기에 들어가게 됨.
