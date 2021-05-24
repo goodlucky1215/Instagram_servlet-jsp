@@ -1,4 +1,6 @@
 'use strict'
+
+
 let section = document.querySelector('section');
 
 window.onload=function(){
@@ -31,9 +33,12 @@ function showHeroes(jsonObj) {
     articlesid.className="articles__id";
     let articlesidtext = document.createTextNode(`👤 ${jsonObj[i]['memberid']}`);
     articlesid.appendChild(articlesidtext);
+	let articlehref = document.createElement('a');
+	articlehref.className="href";
+	articlehref.href = `read.do?no=${jsonObj[i]['fileNo']}`;
     let articlesimg = document.createElement('img');
     articlesimg.className="src";
-    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`
+    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`;
     articlesimg.className="articles__img";
     let articlesbottom = document.createElement('div');
     articlesbottom.className="articles__bottom";
@@ -54,11 +59,12 @@ function showHeroes(jsonObj) {
     articlesspace.className="articles__space";
 
 
+	articlehref.appendChild(articlesimg);
     articlesbottom.appendChild(articlesbottomheart);
     articlesbottom.appendChild(articlesbottomheartnum);
     articlesbottom.appendChild(articlesbottomtext);
     articlesbox.appendChild(articlesid);
-    articlesbox.appendChild(articlesimg);
+    articlesbox.appendChild(articlehref);
     articlesbox.appendChild(articlesbottom);
     articlesbox.appendChild(articlesspace);
     articles__shape__width.appendChild(articlesbox);
@@ -100,7 +106,7 @@ function findtext(){
   let findtext = $(".header__text__find__input__findtext").val();
   console.log(findtext);
   $.ajax({
-    type: 'post',
+    type: 'get',
     url: 'findtext.do',
     dataType:'json', //서버로부터 내가 받는 데이터 타입
 	data:{findtext:findtext},
