@@ -22,7 +22,7 @@
         <input type="submit" value="로그인" class="loginbtn">
       </div>
     </form>
-    <form action="joinForm.jsp" method="post" id="join__shape">
+    <form action="join.do" method="get" id="join__shape">
       <div>
         아직 계정이 없으신가요?
         <input type="submit" value="회원가입"  class="joinbtn">
