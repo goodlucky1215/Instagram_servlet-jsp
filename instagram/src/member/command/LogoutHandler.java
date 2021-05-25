@@ -12,7 +12,7 @@ public class LogoutHandler implements CommandHandler{
 		if(session!=null) {
 			session.invalidate();
 		}
-		res.sendRedirect("/mystudy/instagram/loginForm.jsp");
+		res.sendRedirect("login.do");
 	}
 
 }

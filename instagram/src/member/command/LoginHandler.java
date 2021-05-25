@@ -44,7 +44,7 @@ public class LoginHandler implements CommandHandler {
 		try {
 			User user = loginservice.login(id, password);
 			req.getSession().setAttribute("authUser", user); //유저 아이디와 이름 저장
-			res.sendRedirect("/mystudy/instagram/index.jsp");
+			res.sendRedirect("mainview.do");
 			return null;
 		} catch (LoginFailException e) {
 			req.setAttribute("message","아이디나 비밀번호가 틀렸습니다.");			

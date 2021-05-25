@@ -56,7 +56,7 @@ public class UploadHandler implements CommandHandler{
 		}
 		new FileDao().fileInsert(filevo);
 		try {
-			res.sendRedirect("/mystudy/instagram/index.jsp"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
+			res.sendRedirect("mainview.do"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
