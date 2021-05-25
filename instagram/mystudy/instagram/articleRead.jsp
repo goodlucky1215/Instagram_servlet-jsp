@@ -21,7 +21,7 @@
 	        Instagram
 	      </h2>
 	        <div class="header__text__find__input">
-	          	<form action="index.jsp" method="post">
+	          	<form action="mainview.do" method="post">
 	       			<input type="submit" class='btn' value="메인화면 바로가기">
 	      		</form>
 	        </div>
