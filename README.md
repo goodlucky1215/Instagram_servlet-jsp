@@ -47,7 +47,7 @@
   </filter>
   <filter-mapping>
   	<filter-name>LoginCheckFilter</filter-name> <!-- 만약 같은 url-pattern을 여러게 필터 처리하면 순서대로 필터링을 거치고 화면을 받아온다 -->
-  	<url-pattern>/mystudy/instagram/index.jsp</url-pattern> <!-- 내가 mainview를 킬때마다 로그인 되어 있는지 확인 -->
+  	<url-pattern>/mystudy/instagram/mainview.do</url-pattern> <!-- 내가 mainview를 킬때마다 로그인 되어 있는지 확인 -->
   	<url-pattern>/mystudy/instagram/upload.do</url-pattern> <!-- 내가 새로운 게시글을 올릴 때마다 로그인 되어 있는지 확인 -->
   	<dispatcher>REQUEST</dispatcher> <!-- 이게 디폴트로 클라가 요청할때마다 필터를 낀 후에 서블릿이 동작하도록 해준다. -->
   </filter-mapping>
@@ -168,7 +168,7 @@ try {
  	//getSession()메서드는 서버에 생성된 세션이 있다면 세션을 반환하고, 없다면 세 세션을 생성하여 반환 - 디폴트 값이 true임.
 	//getSession().setAttribute("authUser", user) 세션에다가 값을 저장한다는 것이다. -즉 서버에 저장(캐시) - redirect를 해도 날라가지 않겠다!!
 			req.getSession().setAttribute("authUser", user);
-			res.sendRedirect("/mystudy/Instagram/index.jsp");
+			res.sendRedirect("mainview.do");
 			return null;
 		} catch (LoginFailException e) {
 			req.setAttribute("message","아이디나 비밀번호가 틀렸습니다.");			
@@ -189,7 +189,7 @@ try {
 		if(session!=null) {
 			session.invalidate(); //세션을 반환한다.
 		}
-		res.sendRedirect("/mystudy/Instagram/login.jsp"); //로그인 페이지로 돌아간다.
+		res.sendRedirect("login.do"); //로그인 페이지로 돌아간다.
 	}
 ```
 
@@ -273,9 +273,12 @@ function showHeroes(jsonObj) {
     articlesid.className="articles__id";
     let articlesidtext = document.createTextNode(`👤 ${jsonObj[i]['memberid']}`);
     articlesid.appendChild(articlesidtext);
+	let articlehref = document.createElement('a');
+	articlehref.className="href";
+	articlehref.href = `read.do?no=${jsonObj[i]['fileNo']}`;
     let articlesimg = document.createElement('img');
     articlesimg.className="src";
-    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`
+    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`;
     articlesimg.className="articles__img";
     let articlesbottom = document.createElement('div');
     articlesbottom.className="articles__bottom";
@@ -295,11 +298,13 @@ function showHeroes(jsonObj) {
     let articlesspace = document.createElement('div');
     articlesspace.className="articles__space";
 
+
+	articlehref.appendChild(articlesimg);
     articlesbottom.appendChild(articlesbottomheart);
     articlesbottom.appendChild(articlesbottomheartnum);
     articlesbottom.appendChild(articlesbottomtext);
     articlesbox.appendChild(articlesid);
-    articlesbox.appendChild(articlesimg);
+    articlesbox.appendChild(articlehref);
     articlesbox.appendChild(articlesbottom);
     articlesbox.appendChild(articlesspace);
     articles__shape__width.appendChild(articlesbox);
@@ -384,7 +389,7 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
 		}
 		new FileDao().fileInsert(filevo);
 		try {
-			res.sendRedirect("/mystudy/instagram/index.jsp"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
+			res.sendRedirect("mainview.do"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
