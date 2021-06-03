@@ -8,12 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
 import com.google.gson.Gson;
 
-public class MainVeiwHandler implements CommandHandler {
-	private static final String FORM_VIEW = "loginForm.jsp";
+public class MainVeiwHandler extends MultiActionController{
+	private static final String FORM_VIEW = "loginForm";
 	private LoginService loginservice = new LoginService();
-	@Override
 	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String result = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {

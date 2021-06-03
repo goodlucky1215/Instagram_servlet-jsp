@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?> <!--  ?xml => xml의 선언문  // -->
+<!-- beans => 클래스와 동급이다. root태그이다. // xmlns => namespace의 약자다 -->
+<!-- http://www.springframework.org/schema/beans => 유효성 검사 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- 서블릿: 컨트롤 계층의 역할  -->
+	<!--  2가지 방법 -->
+	<!--  BeanNameUrlHandlerMapping은  name를 가져오고, 얘는 값 하나만을 가져온다 (딱 봐도 비효율적이라는거지!!)-->
+	<!--  SimpleUrlHandlerMapping은 id를 가져온다. 얘는 저렇게 prop를 여러가 갖다 쓸 수 있다. -->
+	<bean id="default-handler-mapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	
+	<!-- controller가져오기 -->
+	<bean id="join-controller" class="member.command.JoinHandler2">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="checkid-controller" class="member.command.checkidHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="login-controller" class="member.command.LoginHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="logout-controller" class="member.command.LogoutHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="upload-controller" class="member.command.UploadHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="mainview-controller" class="member.command.IndexHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="index-controller" class="member.command.MainVeiwHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="heart-controller" class="member.command.HeartHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="findtext-controller" class="member.command.FindtextHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="read-controller" class="member.command.ArticleReadHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	<bean id="delete-controller" class="member.command.DeleteHandler">
+		<property name="methodNameResolver" ref="sns-resolver" />
+	</bean>
+	
+
+	
+	
+	<!-- 여기는 url-mapping -->
+	<bean id="url-mapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/mystudy/instagram/join.do">join-controller</prop>
+				<prop key="/mystudy/instagram/checkid.do">checkid-controller</prop>
+				<prop key="/mystudy/instagram/login.do">login-controller</prop>
+				<prop key="/mystudy/instagram/logout.do">logout-controller</prop>
+				<prop key="/mystudy/instagram/upload.do">upload-controller</prop>
+				<prop key="/mystudy/instagram/mainview.do">mainview-controller</prop>
+				<prop key="/mystudy/instagram/index.do">index-controller</prop>
+				<prop key="/mystudy/instagram/heart.do">heart-controller</prop>
+				<prop key="/mystudy/instagram/findtext.do">findtext-controller</prop>
+				<prop key="/mystudy/instagram/read.do">read-controller</prop>
+				<prop key="/mystudy/instagram/delete.do">delete-controller</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- HttpServlet이면 표준이다. DispacherServlet이면 스프링이다 -->
+	<!-- 메소드 오버라이딩은 건들 수 없는데 void면 유지를 어떻게 하지? request로 그래서 관리하게 되는 것임. -->
+	<bean id="sns-resolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+		<property name="mappings">
+			<props>
+				<prop key="/mystudy/instagram/join.do">process</prop>
+				<prop key="/mystudy/instagram/checkid.do">process</prop>
+				<prop key="/mystudy/instagram/login.do">process</prop>
+				<prop key="/mystudy/instagram/logout.do">process</prop>
+				<prop key="/mystudy/instagram/upload.do">process</prop>
+				<prop key="/mystudy/instagram/mainview.do">process</prop>
+				<prop key="/mystudy/instagram/index.do">process</prop>
+				<prop key="/mystudy/instagram/heart.do">process</prop>
+				<prop key="/mystudy/instagram/findtext.do">process</prop>
+				<prop key="/mystudy/instagram/read.do">process</prop>
+				<prop key="/mystudy/instagram/delete.do">process</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/mystudy/instagram/" />
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>

@@ -9,12 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class DeleteHandler implements CommandHandler{
-	private ArticleReadDao articlereaddao = new ArticleReadDao();
-	private static final String FORM_VIEW = "articleRead.jsp";
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+public class DeleteHandler extends MultiActionController{
+	private ArticleReadDao articlereaddao = new ArticleReadDao();
+	private static final String FORM_VIEW = "articleRead";
+
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res){
+		ModelAndView mav = new ModelAndView();
 		String viewPage = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {//보내는 방식이 get일때,equalsIgnoreCase이것은 대소문자 구분 안함.
 			viewPage = processForm(req,res); 
@@ -24,9 +27,9 @@ public class DeleteHandler implements CommandHandler{
 			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		}
 		if(viewPage != null) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(viewPage);
-			dispatcher.forward(req, res);
-		}		
+			mav.setViewName(viewPage);
+		}
+		return mav;
 	}
 
 	private String processForm(HttpServletRequest req, HttpServletResponse res) { //get으로 받으면 다시 회원가입 창으로 이동
@@ -51,7 +54,7 @@ public class DeleteHandler implements CommandHandler{
 			try {
 				System.out.println("돼");
 				articlereaddao.getDelete(articleNum);
-				res.sendRedirect("mainview.do");
+				res.sendRedirect("mainview");
 				return null;
 			} catch (IOException e) {
 				Map<String, Object> articleread = articlereaddao.articleRead(user.getId(), articleNum);

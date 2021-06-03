@@ -4,6 +4,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -11,9 +13,8 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.MultipartRequest;
 
 
-public class UploadHandler implements CommandHandler{
+public class UploadHandler extends MultiActionController{
 
-	@Override
 	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String result = null;
 		if("GET".equalsIgnoreCase(req.getMethod())) {

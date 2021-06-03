@@ -7,13 +7,16 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class JoinHandler2 implements CommandHandler{
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-	private static final String FORM_VIEW = "joinForm.jsp";
+public class JoinHandler2 extends MultiActionController{
+
+	private static final String FORM_VIEW = "joinForm";
 	private JoinService joinService = new JoinService();
 
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res){
+		ModelAndView mav = new ModelAndView();
 		String viewPage = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {//보내는 방식이 get일때,equalsIgnoreCase이것은 대소문자 구분 안함.
 			viewPage = processForm(req,res); 
@@ -23,9 +26,10 @@ public class JoinHandler2 implements CommandHandler{
 			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		}
 		if(viewPage != null) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(viewPage);
-			dispatcher.forward(req, res);
-		}		
+			mav.setViewName(viewPage);
+		}
+		
+		return mav;
 	}
 
 	private String processForm(HttpServletRequest req, HttpServletResponse res) { //get으로 받으면 다시 회원가입 창으로 이동
@@ -55,9 +59,8 @@ public class JoinHandler2 implements CommandHandler{
 		
 		//errors가 비어있다면, 에러가 없다는 것이므로 로그인 화면으로 넘어 갈 준비를 한다.
 		try {
-			System.out.println("dd");
 			joinService.join(joinReq);//회원가입 dao에 값 저장하기위해서
-			return "joinSuccess.jsp";
+			return "joinSuccess";
 		} catch (DuplicateIdException e) {
 		//그러나 만약에 이미 존재하는 아이디로 한다면 다시 회원가입 폼으로 돌아간다.
 			errors.put("duplicateId", Boolean.TRUE);

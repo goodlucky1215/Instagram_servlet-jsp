@@ -8,10 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class ArticleReadHandler implements CommandHandler{
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+public class ArticleReadHandler extends MultiActionController{
 	private ArticleReadDao articlereaddao = new ArticleReadDao();
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) {
+		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();  
 		User user = (User) session.getAttribute("authUser");
 		String noVal = req.getParameter("no");
@@ -20,10 +24,10 @@ public class ArticleReadHandler implements CommandHandler{
 			Map<String, Object> articleread = articlereaddao.articleRead(user.getId(), articleNum);
 			System.out.println(articleread.get("contentText"));
 			req.setAttribute("articleread",articleread);
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/mystudy/instagram/articleRead.jsp");
-			dispatcher.forward(req, res);  
+			mav.setViewName("articleRead");  
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		return mav;
 	}
 }

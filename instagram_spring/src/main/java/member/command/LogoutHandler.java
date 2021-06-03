@@ -1,15 +1,19 @@
 package member.command;
 
+import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LogoutHandler implements CommandHandler{
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+public class LogoutHandler extends MultiActionController{
+
+	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException{
 		HttpSession session = req.getSession(false);
+
 		if(session!=null) {
 			session.invalidate();
 		}

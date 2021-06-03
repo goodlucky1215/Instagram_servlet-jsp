@@ -1,46 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
-<!-- 
-web.xml문서는 톰캣 서버 기동시 가장 먼저 스캔하는 문서임.
-배치 서술자라고 불린다.
-<context-param>태그 안에 오는 선언은 서버 기동시 한번 읽어서 서버가 종료될 때까지 기억함.
-프로젝트 공통된 관심사(JDBC연동, 로그관리, 보안문제, 트랜잭션처리) 인것들 중에서
-로그에 대한 설정을 실습
- -->
-  <context-param>
-  	<param-name>log4jConfigLocation</param-name>
-  	<param-value>/WEB-INF/classes/log4j.properties</param-value>
-  </context-param>
-
-  <context-param>
-  	<description>로깅 여부</description>
-  	<param-name>logEnabled</param-name>
-  	<param-value>true</param-value>
-  </context-param>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!-- contextparam은 모든 파일들의 공통된 관심사 -> 즉 서버가 꺼질때까지 계속 유지된다. -->
+ 	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/log4j.properties </param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring-service.xml
+		   ,/WEB-INF/spring-data.xml
+		</param-value>
+	</context-param>
+	<!-- 서비스에 로직을 넣고,data에... -->
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
   
-  <context-param>
-  	<description>디버깅 레벨</description>
-  	<param-name>debugingLevel</param-name>
-  	<param-value>5</param-value>
-  </context-param>
-  
-  
-  <servlet>
-  	<servlet-name>ControllerUsingURI</servlet-name>
-  	<servlet-class>member.command.ControllerUsingURI</servlet-class>
-  	<init-param>
-  		<param-name>configFile</param-name>
-  		<param-value>
-  			/WEB-INF/classes/commandHandlerURI.properties
-  		</param-value>
-  	</init-param>
-  	<load-on-startup>1</load-on-startup>
-  </servlet>
-  
-  <servlet-mapping>
-  	<servlet-name>ControllerUsingURI</servlet-name>
-  	<url-pattern>*.do</url-pattern>
-  </servlet-mapping>
+  	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
   
   <filter> <!-- 필터는 클라와 내가 들어가려는 서블릿 그 사이에 존재해서 한 번 필터링을 해주는 것임. -->
   	<filter-name>LoginCheckFilter</filter-name><!-- 내가 사용하려는 필터링 이름 -->

@@ -4,12 +4,15 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class IndexHandler implements CommandHandler {
-	private static final String FORM_VIEW = "index.jsp";
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+public class IndexHandler extends MultiActionController{
+	private static final String FORM_VIEW = "index";
 	private LoginService loginservice = new LoginService();
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String loginResult = null;
+		ModelAndView mav = new ModelAndView();
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			loginResult = processForm(req, res);
 		}
@@ -20,9 +23,9 @@ public class IndexHandler implements CommandHandler {
 			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		}
 		if(loginResult!=null) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(loginResult);
-			dispatcher.forward(req,res);
+			mav.setViewName(loginResult);
 		}
+		return mav;
 	}
 
 	private String processForm(HttpServletRequest req, HttpServletResponse res) {
@@ -30,7 +33,7 @@ public class IndexHandler implements CommandHandler {
 	}
 
 	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		return "index.jsp";
+		return "index";
 	}
 
 

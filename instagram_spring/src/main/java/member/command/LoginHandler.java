@@ -7,11 +7,14 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LoginHandler implements CommandHandler {
-	private static final String FORM_VIEW = "loginForm.jsp";
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+public class LoginHandler extends MultiActionController{
+	private static final String FORM_VIEW = "loginForm";
 	private LoginService loginservice = new LoginService();
-	@Override
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		ModelAndView mav = new ModelAndView();
 		String loginResult = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			loginResult = processForm(req, res);
@@ -23,9 +26,9 @@ public class LoginHandler implements CommandHandler {
 			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		}
 		if(loginResult!=null) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(loginResult);
-			dispatcher.forward(req,res);
+			mav.setViewName(loginResult);
 		}
+		return mav;
 	}
 
 	private String processForm(HttpServletRequest req, HttpServletResponse res) {
@@ -44,8 +47,8 @@ public class LoginHandler implements CommandHandler {
 		try {
 			User user = loginservice.login(id, password);
 			req.getSession().setAttribute("authUser", user); //유저 아이디와 이름 저장
-			res.sendRedirect("mainview.do");
-			return null;
+			//res.sendRedirect("mainview.do");
+			return"redirect:login.do";
 		} catch (LoginFailException e) {
 			req.setAttribute("message","아이디나 비밀번호가 틀렸습니다.");			
 			return  FORM_VIEW;
