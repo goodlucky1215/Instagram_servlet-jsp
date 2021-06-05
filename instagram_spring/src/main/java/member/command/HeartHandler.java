@@ -2,6 +2,7 @@ package member.command;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ public class HeartHandler extends MultiActionController{
 		this.heartdao = heartdao;
 	}
 
-	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException{
+	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, SQLException{
 		req.setCharacterEncoding("utf-8");
 	    res.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = res.getWriter();

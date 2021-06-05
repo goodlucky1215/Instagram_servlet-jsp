@@ -5,10 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 public class FileDao {
-	public FileVO fileInsert(FileVO filevo) {
-		ConnectionProvider conpro = ConnectionProvider.getInstance();
-		Connection con = conpro.getConnection();
+	private Connection con = null;
+	private DataSource ds =null;
+	public void setDataSource(DataSource ds) {
+		this.ds  = ds;
+	}
+	public FileVO fileInsert(FileVO filevo) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String maxnosql = "select max(fileno)+1 as max_num from ( select fileno  from jspfile union all select 0 from dual )";
@@ -35,9 +41,6 @@ public class FileDao {
 			pstmt.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
-		finally{
-			conpro.freeConnection(con, pstmt, rs);
 		}
 		return filevo;
 	}

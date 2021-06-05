@@ -12,17 +12,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MemberDao {
+import javax.sql.DataSource;
 
-	public Member selectById(Connection con, String id) throws SQLException {
+public class MemberDao {
+	private Connection con = null;
+	private DataSource ds =null;
+	public void setDataSource(DataSource ds) {
+		this.ds  = ds;
+	}
+	public Member selectById(String id) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "select * from jspmember where memberid= ?";
+		Member member = null;
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
-			Member member = null;
 			if(rs.next()) {
 				member = new Member(
 						rs.getString("memberid"),
@@ -31,17 +38,18 @@ public class MemberDao {
 						toDate(rs.getTimestamp("regdate"))
 						);
 			}
-			return member;
-		} finally {
-			ConnectionProvider.freeConnection(pstmt,rs);
-		}
+		}catch(Exception e){
+			
+		}	
+		return member;
 	}
 
 	private Date toDate(Timestamp date) {
 		return date == null ? null : new Date(date.getTime());
 	}
 
-	public void insert(Connection con, Member member) throws SQLException  {
+	public void insert(Member member) throws SQLException  {
+		con = ds.getConnection();
 		System.out.println("저장1");
 		String sql = "insert into jspmember values(?,?,?,?)";
 		System.out.println("저장1");
@@ -62,7 +70,8 @@ public class MemberDao {
 		
 	}
 
-	public List<Map<String, Object>> selectArticle(Connection con,String memberId,String text) {
+	public List<Map<String, Object>> selectArticle(String memberId,String text) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String findtext="%"+text+"%";
@@ -88,9 +97,6 @@ public class MemberDao {
 		} catch(Exception e){
 			
 		}	
-		finally {
-			ConnectionProvider.freeConnection(pstmt,rs);
-		}
 		return articles;
 	}
 

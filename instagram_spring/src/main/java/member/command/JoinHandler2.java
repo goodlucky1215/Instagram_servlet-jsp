@@ -1,6 +1,7 @@
 package member.command;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,14 +15,13 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.util.HashMapBinder;
 
 public class JoinHandler2 extends MultiActionController{
-
 	private static final String FORM_VIEW = "joinForm";
 	private JoinService joinService = null;
 	public void setJoinService(JoinService joinService) {
 		this.joinService = joinService;
 	}
 
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException{
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, SQLException{
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		String viewPage = null;
@@ -43,7 +43,7 @@ public class JoinHandler2 extends MultiActionController{
 		return FORM_VIEW;
 	}
 	
-	private String processSubmit(HttpServletRequest req, HttpServletResponse res) { //post로 받으면 정상으로 폼 전송 처리
+	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws SQLException { //post로 받으면 정상으로 폼 전송 처리
 		//joinForm으로 부터 값을 다 가져온다.
 		MemberVO joinReq = new MemberVO();
 		joinReq.setId(req.getParameter("id")); //joinForm에서 name이 "id"니깐!

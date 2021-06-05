@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.util.HashMapBinder;
@@ -38,7 +39,7 @@ public class UploadHandler extends MultiActionController{
 	private String processForm(HttpServletRequest req, HttpServletResponse res) {
 		return "newArticleForm";
 	}
-	private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
+	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws SQLException {
 		String directory = req.getSession().getServletContext().getRealPath("/upload/");
 		System.out.println(directory);
 		int maxSize = 1024*1024*100;

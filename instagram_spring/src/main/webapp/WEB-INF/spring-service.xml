@@ -3,18 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<bean id="join-service" class="member.command.JoinService">
+		<property name="memberDao" ref="member-dao" />
 	</bean>
 	
 	<bean id="login-service" class="member.command.LoginService">
-	</bean>
-	
-	<bean id="file-service" class="member.command.FileDao">
-	</bean>
-	
-	<bean id="heart-service" class="member.command.HeartDao">
-	</bean>
-	
-	<bean id="articleread-service" class="member.command.ArticleReadDao">
+		<property name="memberDao" ref="member-dao" />
 	</bean>
 
 </beans>

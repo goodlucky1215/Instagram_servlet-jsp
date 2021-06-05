@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+   <bean id="data-source-target" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- jdbc가  DriverManagerDataSource를 제공하고(즉 사용자 정의 클래스가 아니다!),
+		 property로 다음과같은 애들을 가짐. name은 settername이겠지!
+	     setDriverClassName, setUrl 등등 -->
+		<property name="driverClassName">
+			<value>oracle.jdbc.driver.OracleDriver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:oracle:thin:@127.0.0.1:1521:orcl11</value>
+		</property>
+		<property name="username">
+			<value>tomato80</value>
+		</property>
+		<property name="password">
+			<value>tiger</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="member-dao" class="member.command.MemberDao">
+		<property name="dataSource" ref="data-source-target" />
+	</bean>
+	
+		<bean id="file-service" class="member.command.FileDao">
+		<property name="dataSource" ref="data-source-target" />
+	</bean>
 
+	<bean id="heart-service" class="member.command.HeartDao">
+		<property name="dataSource" ref="data-source-target" />
+	</bean>
+	
+	<bean id="articleread-service" class="member.command.ArticleReadDao">
+		<property name="dataSource" ref="data-source-target" />
+	</bean>
 
 </beans>

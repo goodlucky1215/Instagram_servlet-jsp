@@ -2,6 +2,7 @@ package member.command;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class DeleteHandler extends MultiActionController{
 		this.articlereaddao = articlereaddao;
 	}
 
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException{
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, SQLException{
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		String viewPage = null;
@@ -43,7 +44,7 @@ public class DeleteHandler extends MultiActionController{
 		return FORM_VIEW;
 	}
 	
-	private String processSubmit(HttpServletRequest req, HttpServletResponse res) { //post로 받으면 정상으로 폼 전송 처리
+	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws SQLException { //post로 받으면 정상으로 폼 전송 처리
 		HttpSession session = req.getSession();  
 		User user = (User) session.getAttribute("authUser");
 		String noVal = req.getParameter("no");

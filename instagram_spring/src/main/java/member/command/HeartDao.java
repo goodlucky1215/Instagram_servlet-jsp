@@ -5,10 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 public class HeartDao {
-	public int heartAddRe(String userid,int articleNum) {
-		ConnectionProvider conpro = ConnectionProvider.getInstance();
-		Connection con = conpro.getConnection();
+	private Connection con = null;
+	private DataSource ds =null;
+	public void setDataSource(DataSource ds) {
+		this.ds  = ds;
+	}
+	public int heartAddRe(String userid,int articleNum) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int heartsu= 0;
@@ -48,9 +54,6 @@ public class HeartDao {
 			pstmt.executeUpdate();
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
-		finally{
-			conpro.freeConnection(con, pstmt, rs);
 		}
 		return heartsu;
 	}

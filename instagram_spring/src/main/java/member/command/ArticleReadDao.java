@@ -7,10 +7,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 public class ArticleReadDao {
-	public Map<String, Object> articleRead(String userid,int articleNum) {
-		ConnectionProvider conpro = ConnectionProvider.getInstance();
-		Connection con = conpro.getConnection();
+	private Connection con = null;
+	private DataSource ds =null;
+	public void setDataSource(DataSource ds) {
+		this.ds  = ds;
+	}
+	public Map<String, Object> articleRead(String userid,int articleNum) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Map<String, Object> articleread = new HashMap<>();
@@ -36,15 +42,11 @@ public class ArticleReadDao {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		finally{
-			conpro.freeConnection(con, pstmt, rs);
-		}
 		return articleread;
 	}
 
-	public int getDelete(int articleNum) {
-		ConnectionProvider conpro = ConnectionProvider.getInstance();
-		Connection con = conpro.getConnection();
+	public int getDelete(int articleNum) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int delete_num = 0;
@@ -60,18 +62,13 @@ public class ArticleReadDao {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		finally{
-			conpro.freeConnection(con, pstmt, rs);
-		}
 		return delete_num;
 	}
 
-	public String getDeleteUser(int articleNum) {
-		ConnectionProvider conpro = ConnectionProvider.getInstance();
-		Connection con = conpro.getConnection();
+	public String getDeleteUser(int articleNum) throws SQLException {
+		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int delete_num = 0;
 		String user = null;
 		String sql="select MEMBERID from JSPFILE WHERE FILENO=?";
 		try {
@@ -83,9 +80,6 @@ public class ArticleReadDao {
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
-		}
-		finally{
-			conpro.freeConnection(con, pstmt, rs);
 		}
 		return user;
 		

@@ -2,6 +2,7 @@ package member.command;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ public class checkidHandler extends MultiActionController {
 	public void setJoinService(JoinService joinService) {
 		this.joinService = joinService;
 	}
-	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException {
+	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, SQLException {
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		PrintWriter out = res.getWriter();
