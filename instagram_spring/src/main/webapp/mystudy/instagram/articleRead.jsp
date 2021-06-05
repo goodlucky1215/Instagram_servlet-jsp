@@ -53,7 +53,7 @@
 					<img class="articles__img" src="/upload/${articleread.fileName}">
 					<div class="articles__bottom">
 						<div class="articles__bottom__heart" onclick="heartClick(${articleread.fileNo})" id="${articleread.fileNo}"  name="fileNo" value=${articleread.fileNo}>
-							<%	if(map.get("heart")=="0") { %>
+							<%	if("0".equals(map.get("heart"))) { %>
 								🤍
 							<% } else { %>
 								💗

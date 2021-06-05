@@ -48,7 +48,7 @@ public class LoginHandler extends MultiActionController{
 			User user = loginservice.login(id, password);
 			req.getSession().setAttribute("authUser", user); //유저 아이디와 이름 저장
 			//res.sendRedirect("mainview.do");
-			return"redirect:login.do";
+			return"redirect:mainview.do";
 		} catch (LoginFailException e) {
 			req.setAttribute("message","아이디나 비밀번호가 틀렸습니다.");			
 			return  FORM_VIEW;

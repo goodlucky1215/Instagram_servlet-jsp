@@ -51,18 +51,9 @@ public class DeleteHandler extends MultiActionController{
 			req.setAttribute("error", "자신의 게시물만 삭제할 수 있습니다!");
 			return FORM_VIEW;
 		}else {
-			try {
-				System.out.println("돼");
-				articlereaddao.getDelete(articleNum);
-				res.sendRedirect("mainview");
-				return null;
-			} catch (IOException e) {
-				Map<String, Object> articleread = articlereaddao.articleRead(user.getId(), articleNum);
-				System.out.println(articleread.get("contentText"));
-				req.setAttribute("articleread",articleread);
-				req.setAttribute("error", "자신의 게시물만 삭제할 수 있습니다!");
-				return  FORM_VIEW;
-			}	
+			System.out.println("돼");
+			articlereaddao.getDelete(articleNum);
+			return "redirect:mainview.do";	
 		}
 	}
 }

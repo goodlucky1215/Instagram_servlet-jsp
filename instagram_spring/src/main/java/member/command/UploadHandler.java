@@ -4,6 +4,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import java.io.File;
@@ -15,8 +16,9 @@ import com.oreilly.servlet.MultipartRequest;
 
 public class UploadHandler extends MultiActionController{
 
-	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String result = null;
+		ModelAndView mav = new ModelAndView();
 		if("GET".equalsIgnoreCase(req.getMethod())) {
 			result = processForm(req,res);
 		}
@@ -24,12 +26,12 @@ public class UploadHandler extends MultiActionController{
 			result = processSubmit(req,res);
 		}
 		if(result!=null) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(result);
-			dispatcher.forward(req, res);
+			mav.setViewName(result);
 		}
+		return mav;
 	}
 	private String processForm(HttpServletRequest req, HttpServletResponse res) {
-		return "newArticleForm.jsp";
+		return "newArticleForm";
 	}
 	private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
 		String directory = req.getSession().getServletContext().getRealPath("/upload/");
@@ -53,16 +55,10 @@ public class UploadHandler extends MultiActionController{
 		filevo.setFileName(multipartRequest.getOriginalFileName("file"));
 		if(filevo.getFileRealName()==null) {
 			req.setAttribute("message","글은 쓰지 않더라도 사진은 넣어주세요!");
-			return "newArticleForm.jsp"; 
+			return "newArticleForm"; 
 		}
 		new FileDao().fileInsert(filevo);
-		try {
-			res.sendRedirect("mainview.do"); //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return "redirect:mainview.do"; //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
 	}
 
 }
