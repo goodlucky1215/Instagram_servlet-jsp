@@ -14,7 +14,10 @@ import com.google.gson.Gson;
 
 public class MainVeiwHandler extends MultiActionController{
 	private static final String FORM_VIEW = "loginForm";
-	private LoginService loginservice = new LoginService();
+	private LoginService loginservice = null;
+	public void setLoginService(LoginService loginservice) {
+		this.loginservice = loginservice;
+	}
 	public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String result = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {

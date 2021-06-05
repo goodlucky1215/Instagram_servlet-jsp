@@ -14,36 +14,46 @@
 	<!-- controller가져오기 -->
 	<bean id="join-controller" class="member.command.JoinHandler2">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="joinService" ref="join-service" />
 	</bean>
 	<bean id="checkid-controller" class="member.command.checkidHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="joinService" ref="join-service" />
 	</bean>
 	<bean id="login-controller" class="member.command.LoginHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="loginService" ref="login-service" />
 	</bean>
 	<bean id="logout-controller" class="member.command.LogoutHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
 	</bean>
 	<bean id="upload-controller" class="member.command.UploadHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="filedao" ref="file-service" />
 	</bean>
 	<bean id="mainview-controller" class="member.command.IndexHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="loginService" ref="login-service" />
 	</bean>
 	<bean id="index-controller" class="member.command.MainVeiwHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="loginService" ref="login-service" />
 	</bean>
 	<bean id="heart-controller" class="member.command.HeartHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="heartdao" ref="heart-service" />
 	</bean>
 	<bean id="findtext-controller" class="member.command.FindtextHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="loginService" ref="login-service" />
 	</bean>
 	<bean id="read-controller" class="member.command.ArticleReadHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="articlereaddao" ref="articleread-service" />
 	</bean>
 	<bean id="delete-controller" class="member.command.DeleteHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
+		<property name="articlereaddao" ref="articleread-service" />
 	</bean>
 	
 

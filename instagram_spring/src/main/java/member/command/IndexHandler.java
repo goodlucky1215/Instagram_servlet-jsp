@@ -11,7 +11,10 @@ import com.util.HashMapBinder;
 
 public class IndexHandler extends MultiActionController{
 	private static final String FORM_VIEW = "index";
-	private LoginService loginservice = new LoginService();
+	private LoginService loginservice = null;
+	public void setLoginService(LoginService loginservice) {
+		this.loginservice = loginservice;
+	}
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HashMapBinder hmb = new HashMapBinder(req);
 		String loginResult = null;

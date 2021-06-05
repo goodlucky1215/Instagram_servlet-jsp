@@ -12,7 +12,10 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.util.HashMapBinder;
 
 public class checkidHandler extends MultiActionController {
-	private JoinService joinService = new JoinService();
+	private JoinService joinService = null;
+	public void setJoinService(JoinService joinService) {
+		this.joinService = joinService;
+	}
 	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();

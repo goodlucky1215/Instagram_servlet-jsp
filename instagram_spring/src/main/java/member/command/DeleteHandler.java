@@ -16,8 +16,11 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.util.HashMapBinder;
 
 public class DeleteHandler extends MultiActionController{
-	private ArticleReadDao articlereaddao = new ArticleReadDao();
 	private static final String FORM_VIEW = "articleRead";
+	private ArticleReadDao articlereaddao = null;
+	public void setArticlereaddao(ArticleReadDao articlereaddao) {
+		this.articlereaddao = articlereaddao;
+	}
 
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException{
 		HashMapBinder hmb = new HashMapBinder(req);

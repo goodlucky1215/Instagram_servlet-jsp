@@ -16,7 +16,10 @@ import com.util.HashMapBinder;
 public class JoinHandler2 extends MultiActionController{
 
 	private static final String FORM_VIEW = "joinForm";
-	private JoinService joinService = new JoinService();
+	private JoinService joinService = null;
+	public void setJoinService(JoinService joinService) {
+		this.joinService = joinService;
+	}
 
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException{
 		HashMapBinder hmb = new HashMapBinder(req);
@@ -47,17 +50,13 @@ public class JoinHandler2 extends MultiActionController{
 		joinReq.setName(req.getParameter("name")); //joinForm에서 name이 "name"니깐!
 		joinReq.setPassword(req.getParameter("password")); //joinForm에서 name이 "password"니깐!
 		joinReq.setConfirmPassword(req.getParameter("confirmPassword")); //joinForm에서 name이 "confirmPassword"니깐!
-		System.out.println(joinReq.getId());
 		
 		Map<String, Boolean> errors = new HashMap<>(); //errors를 담을 map을 만들어줌.
-		System.out.println(joinReq.getId());
 		req.setAttribute("errors", errors); //req에다가 errors라는 이름으로 객체 errors를 저장해두는 것임
 		
 		joinReq.validate(errors); //값이 빈값인지 아닌지 확인하는 메소드
-		System.out.println(errors);
 
 		if(!errors.isEmpty()) { //만약에 errors안에 값이 존재하면 -빈 값이 있다는 것(혹은 비번!=확인비번)이므로 다시 회원가입 폼으로 간다.
-			System.out.println(joinReq.getId());
 			return FORM_VIEW;
 		}
 		
@@ -71,6 +70,5 @@ public class JoinHandler2 extends MultiActionController{
 			return FORM_VIEW;
 		}
 	}
-
 
 }

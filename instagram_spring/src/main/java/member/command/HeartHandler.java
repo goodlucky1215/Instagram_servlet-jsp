@@ -10,7 +10,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 public class HeartHandler extends MultiActionController{
-	private HeartDao heartdao = new HeartDao();
+	private HeartDao heartdao = null;
+	public void setHeartdao(HeartDao heartdao) {
+		this.heartdao = heartdao;
+	}
 
 	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException{
 		req.setCharacterEncoding("utf-8");

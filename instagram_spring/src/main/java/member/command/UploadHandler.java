@@ -16,7 +16,10 @@ import com.oreilly.servlet.MultipartRequest;
 
 
 public class UploadHandler extends MultiActionController{
-
+	private FileDao filedao = null;
+	public void setFiledao(FileDao filedao) {
+		this.filedao = filedao;
+	}	
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HashMapBinder hmb = new HashMapBinder(req);
 		String result = null;
@@ -59,7 +62,7 @@ public class UploadHandler extends MultiActionController{
 			req.setAttribute("message","글은 쓰지 않더라도 사진은 넣어주세요!");
 			return "newArticleForm"; 
 		}
-		new FileDao().fileInsert(filevo);
+		filedao.fileInsert(filevo);
 		return "redirect:mainview.do"; //파일을 업로드하니깐 redirect처리해주자(뒤로가기로 중복되면 아니돼니깐)
 	}
 
