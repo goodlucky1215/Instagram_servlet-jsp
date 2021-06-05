@@ -7,10 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.util.HashMapBinder;
+
 public class IndexHandler extends MultiActionController{
 	private static final String FORM_VIEW = "index";
 	private LoginService loginservice = new LoginService();
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		HashMapBinder hmb = new HashMapBinder(req);
 		String loginResult = null;
 		ModelAndView mav = new ModelAndView();
 		if(req.getMethod().equalsIgnoreCase("GET")) {

@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.util.HashMapBinder;
+
 public class LoginHandler extends MultiActionController{
 	private static final String FORM_VIEW = "loginForm";
 	private LoginService loginservice = new LoginService();
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		String loginResult = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {

@@ -41,12 +41,11 @@ public class MainVeiwHandler extends MultiActionController{
 		User user = (User) session.getAttribute("authUser");
 		List<Map<String,Object>> articles = loginservice.articleList(user.getId(),"_");
 
-        //req.setAttribute("articles", articles);
-       
         //타입을 json으로 바꿔줘야됨
-        //res.setContentType("application/json");
-        //res.setCharacterEncoding("UTF-8");
-       
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        //res.setContentType("application/json;charset=utf-8"); => 이렇게 한번에 처리해도 됨
+        
         //json 형태의 string으로 바꿔준다.
         String gson = new Gson().toJson(articles);
 		//둘 다 입력했다면 이제 찾기 시작

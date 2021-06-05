@@ -9,9 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.util.HashMapBinder;
+
 public class checkidHandler extends MultiActionController {
 	private JoinService joinService = new JoinService();
 	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		PrintWriter out = res.getWriter();
 		String id = req.getParameter("id");

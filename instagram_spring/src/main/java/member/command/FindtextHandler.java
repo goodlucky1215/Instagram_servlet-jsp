@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.google.gson.Gson;
+import com.util.HashMapBinder;
 
 public class FindtextHandler extends MultiActionController{
 	private static final String FORM_VIEW = "loginForm";
@@ -37,12 +38,13 @@ public class FindtextHandler extends MultiActionController{
 	}
 
 	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		res.setContentType("text/html; charset=UTF-8");
+		req.setCharacterEncoding("utf-8");
 		String text = req.getParameter("findtext");
 		HttpSession session = req.getSession();  
 		User user = (User) session.getAttribute("authUser");
 		List<Map<String,Object>> articles = loginservice.articleList(user.getId(),text);
 
-       
         //DTO 타입의 어레이리스트를 json 형태로 바꿔주는 구문(라이브러리 필수, zip->jar 확장자명 꼭 확인)
         String gson = new Gson().toJson(articles);
 		//둘 다 입력했다면 이제 찾기 시작

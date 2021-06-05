@@ -1,6 +1,7 @@
 package member.command;
 
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +12,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.util.HashMapBinder;
+
 public class ArticleReadHandler extends MultiActionController{
 	private ArticleReadDao articlereaddao = new ArticleReadDao();
 
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException {
+		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();  
 		User user = (User) session.getAttribute("authUser");

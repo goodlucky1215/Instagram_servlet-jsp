@@ -11,12 +11,14 @@ import java.io.File;
 import java.io.IOException;
 
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.util.HashMapBinder;
 import com.oreilly.servlet.MultipartRequest;
 
 
 public class UploadHandler extends MultiActionController{
 
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		HashMapBinder hmb = new HashMapBinder(req);
 		String result = null;
 		ModelAndView mav = new ModelAndView();
 		if("GET".equalsIgnoreCase(req.getMethod())) {

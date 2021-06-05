@@ -1,6 +1,7 @@
 package member.command;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,11 +13,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
+import com.util.HashMapBinder;
+
 public class DeleteHandler extends MultiActionController{
 	private ArticleReadDao articlereaddao = new ArticleReadDao();
 	private static final String FORM_VIEW = "articleRead";
 
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res){
+	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException{
+		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		String viewPage = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {//보내는 방식이 get일때,equalsIgnoreCase이것은 대소문자 구분 안함.
