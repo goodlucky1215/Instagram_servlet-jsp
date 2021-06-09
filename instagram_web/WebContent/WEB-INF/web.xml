@@ -52,4 +52,14 @@ web.xml문서는 톰캣 서버 기동시 가장 먼저 스캔하는 문서임.
   	<url-pattern>/mystudy/instagram/upload.do</url-pattern> <!-- 내가 새로운 게시글을 올릴 때마다 로그인 되어 있는지 확인 -->
   	<dispatcher>REQUEST</dispatcher> <!-- 이게 디폴트로 클라가 요청할때마다 필터를 낀 후에 서블릿이 동작하도록 해준다. -->
   </filter-mapping>
+  
+  <filter> <!-- 필터는 클라와 내가 들어가려는 서블릿 그 사이에 존재해서 한 번 필터링을 해주는 것임. -->
+  	<filter-name>MainViewCheckFilter</filter-name><!-- 내가 사용하려는 필터링 이름 -->
+  	<filter-class>member.command.MainCheckFilter</filter-class> <!-- 사용하는 필터링 클래스 위치 -->
+  </filter>
+  <filter-mapping>
+  	<filter-name>MainViewCheckFilter</filter-name> <!-- 만약 같은 url-pattern을 여러게 필터 처리하면 순서대로 필터링을 거치고 화면을 받아온다 -->
+  	<url-pattern>/mystudy/instagram/login.do</url-pattern> <!-- 내가 mainview를 킬때마다 로그인 되어 있는지 확인 -->
+  	<dispatcher>REQUEST</dispatcher> <!-- 이게 디폴트로 클라가 요청할때마다 필터를 낀 후에 서블릿이 동작하도록 해준다. -->
+  </filter-mapping>
 </web-app>
