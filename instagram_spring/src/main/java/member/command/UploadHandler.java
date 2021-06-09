@@ -57,7 +57,7 @@ public class UploadHandler extends MultiActionController{
 		//보내는 form에서 enctype="multipart/form-data"를 사용하게 되면 req.getParameter로 값을 받아오지 못 한다.
 		filevo.setContentText(multipartRequest.getParameter("content")); 
 		System.out.println(multipartRequest.getParameter("content"));
-		filevo.setFileRealName(multipartRequest.getOriginalFileName("file"));
+		filevo.setFileRealName(multipartRequest.getFilesystemName("file"));
 		filevo.setFileName(multipartRequest.getOriginalFileName("file"));
 		if(filevo.getFileRealName()==null) {
 			req.setAttribute("message","글은 쓰지 않더라도 사진은 넣어주세요!");

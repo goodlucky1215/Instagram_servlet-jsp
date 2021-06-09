@@ -67,7 +67,7 @@ public class MemberDao {
 		ResultSet rs = null;
 		String findtext="%"+text+"%";
 	//고민 많았던걸로 쓰기!
-		String sql = "select FILENO,FILENAME,MEMBERID,CONTENTTEXT,READ_CNT, case when fileno in (select  jf.FILENO from jspfile jf,JSPHEART jt where  jf.FILENO=(JT.FILENO) and JT.MEMBERID=?) then '1' else '0' end heart from JSPFILE WHERE CONTENTTEXT LIKE ? order by fileno desc";
+		String sql = "select FILENO,FILEREALNAME,MEMBERID,CONTENTTEXT,READ_CNT, case when fileno in (select  jf.FILENO from jspfile jf,JSPHEART jt where  jf.FILENO=(JT.FILENO) and JT.MEMBERID=?) then '1' else '0' end heart from JSPFILE WHERE CONTENTTEXT LIKE ? order by fileno desc";
 		List<Map<String, Object>> articles = new ArrayList<>();
 		System.out.println(memberId+findtext);
 		try {
@@ -78,11 +78,12 @@ public class MemberDao {
 			while(rs.next()) {
 				Map<String,Object> art = new HashMap<>();
 				art.put("fileNo",rs.getInt("FILENO"));
-				art.put("fileName",rs.getString("FILENAME"));
+				art.put("fileName",rs.getString("FILEREALNAME"));
 				art.put("memberid",rs.getString("MEMBERID"));
 				art.put("contentText",rs.getString("CONTENTTEXT"));
 				art.put("read_cnt",rs.getString("READ_CNT"));
 				art.put("heart",rs.getString("heart"));
+				System.out.println(art.get("fileName"));
 				articles.add(art);
 			}
 		} catch(Exception e){
