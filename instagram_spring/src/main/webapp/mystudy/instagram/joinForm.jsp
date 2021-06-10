@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.*" %>
+<%
+    Map<String, Boolean> errors = new HashMap<>();
+	errors = (Map<String, Boolean>)request.getAttribute("errors");
+	int size=0;
+	if(errors!=null){
+		size = errors.size();
+	}
+%>
 <!-- prefix는 내가 jstl을 꺼냈을때 <c 여기의 c가 저거임!, uri는 jstl마다 제공하는 기능들의 URI를 가져오는 것임 -->
 <!-- 마지막의 /core 므로 라이브러리 core를 가져오고 주요기능은 변수지원, 흐름제어, URL 처리 등이 있다(나머지는 책 294p) -->
 <!DOCTYPE html>
@@ -24,29 +32,69 @@
 					아이디<br /><input type="text" class="joinform__input" name="id" value="${param.id}" oninput="idcheck()">
 				<div id='message' class='message'></div>
 				<div class="error">
-					<c:if test="${errors.id}">Id를 입력하세요.</c:if> 
+					<%
+						if(size!=0){							
+							if(errors.containsKey("id")){
+					%>
+								Id를 입력하세요.
+					<%
+							}
+						}
+					%>
 				</div> <!-- if문 test = "조건을 여기에다가 적어줌" -->
 				<!-- <c:if test="${errors.duplicateId}">이미 사용중인 아이디입니다.</c:if> 만약 map errors에 저 값이 존재하면 TURE로 되어 있을테니깐 결과를 잡아 낼 것 이다. -->
 				</p>
 				<p>
 					이름<br /><input type="text" class="joinform__input" name="name" value="${param.name}">
 					<div class="error">
-						<c:if test="${errors.name}">이름을 입력하세요.</c:if>
+					<%
+						if(size!=0){							
+							if(errors.containsKey("name")){
+					%>
+								이름을 입력하세요.
+					<%
+							}
+						}
+					%>
 					</div>
 				</p>
 				<p>
 					암호<br /><input type="password" class="joinform__input" name="password">
 					<div class="error">
-						<c:if test="${errors.password}">암호를 입력하세요.</c:if>
+						<%
+							if(size!=0){							
+								if(errors.containsKey("password")){
+						%>
+									암호를 입력하세요.
+						<%
+								}
+							}
+						%>
 					</div>
 				</p>
 				<p>
 					암호 확인<br /><input type="password" class="joinform__input" name="confirmPassword">
 					<div class="error">
-						<c:if test="${errors.confirmpassword}">암호 확인을 입력하세요.</c:if>
+						<%
+							if(size!=0){							
+								if(errors.containsKey("confirmpassword")){
+						%>
+									암호 확인을 입력하세요.
+						<%
+								}
+							}
+						%>
 					</div>
 					<div class="error">
-						<c:if test="${errors.notMatch}">암호와 암호 확인이 일치하지 않습니다.</c:if>
+						<%
+							if(size!=0){							
+								if(errors.containsKey("notMatch")){
+						%>
+									암호와 암호 확인이 일치하지 않습니다.
+						<%
+								}
+							}
+						%>
 					</div>
 				</p>
 				<p>
