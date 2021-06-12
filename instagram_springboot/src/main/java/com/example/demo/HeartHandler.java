@@ -19,7 +19,7 @@ public class HeartHandler{
 	@Autowired(required=true)
 	private HeartDao heartdao = null;
 	
-	@RequestMapping("heart")
+	@RequestMapping("heart.do")
 	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, SQLException{
 		req.setCharacterEncoding("utf-8");
 	    res.setContentType("text/html; charset=UTF-8");

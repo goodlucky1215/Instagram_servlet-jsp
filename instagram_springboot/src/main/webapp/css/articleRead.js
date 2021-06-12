@@ -4,7 +4,7 @@ function heartClick(click_id){
   let heartsu = parseInt($(`#num__${click_id}`).text());
   $.ajax({
     type: 'post',
-    url: 'heart',
+    url: 'heart.do',
     dataType:'text', //서버로부터 내가 받는 데이터 타입
 	data:{click_id:click_id},
     success: function(data){
