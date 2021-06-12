@@ -1,12 +1,6 @@
 package com.example.demo;
 
-import java.io.Console;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,31 +17,24 @@ public class LoginHandler{
 	@Autowired(required=true)
 	private LoginService loginservice = null;
 	@RequestMapping("loginForm")
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		System.out.println("들어와");
+	public String process(HttpServletRequest req) throws Exception {
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
 		String loginResult = null;
 		if(req.getMethod().equalsIgnoreCase("GET")) {
-			loginResult = processForm(req, res);
+			loginResult = processForm();
 		}
 		else if(req.getMethod().equalsIgnoreCase("POST")) {
-			loginResult = processSubmit(req, res);			
+			loginResult = processSubmit(req);			
 		}
-		else {
-			res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-		}
-		if(loginResult!=null) {
-			mav.setViewName(loginResult);
-		}
-		return mav;
+		return loginResult;
 	}
 
-	private String processForm(HttpServletRequest req, HttpServletResponse res) {
+	private String processForm() {
 		return FORM_VIEW;
 	}
 
-	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	private String processSubmit(HttpServletRequest req) throws Exception {
 		String id = trim(req.getParameter("id"));
 		String password = trim(req.getParameter("password"));
 		//아이디나 비밀번호 입력 확인

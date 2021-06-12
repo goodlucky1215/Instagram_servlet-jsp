@@ -17,14 +17,14 @@ import com.util.HashMapBinder;
 public class LogoutHandler{
 
 	@RequestMapping("logout")
-	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException{
+	public String process(HttpServletRequest req) throws IOException{
 		HashMapBinder hmb = new HashMapBinder(req);
 		HttpSession session = req.getSession(false);
 
 		if(session!=null) {
 			session.invalidate();
 		}
-		res.sendRedirect("loginForm");
+		return "redirect:loginForm";
 	}
 
 }

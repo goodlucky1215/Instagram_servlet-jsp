@@ -25,14 +25,11 @@ public class UploadHandler{
 	private FileDao filedao = null;
 	
 	@RequestMapping("upload")
-	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		String result = "newArticleForm";
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName(result);
-		return mav;
+	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		return "newArticleForm";
 	}
 	@RequestMapping("upload1")
-	public String a(HttpServletRequest req, HttpServletResponse res,@RequestParam("content")String content,@RequestParam("file") MultipartFile file) throws SQLException, IllegalStateException, IOException {
+	public String upload(HttpServletRequest req, HttpServletResponse res,@RequestParam("content")String content,@RequestParam("file") MultipartFile file) throws SQLException, IllegalStateException, IOException {
 		String rootPath = req.getServletContext().getRealPath("/upload/");
 	    System.out.println(rootPath);
 		FileVO filevo = new FileVO();
