@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.util.HashMapBinder;
@@ -21,23 +23,13 @@ public class DeleteHandler{
 	@Autowired(required=true)
 	private ArticleReadDao articlereaddao = null;
 
-	@RequestMapping("delete")
-	public String process(HttpServletRequest req) throws UnsupportedEncodingException, SQLException{
-		HashMapBinder hmb = new HashMapBinder(req);
-		String viewPage = null;
-		if(req.getMethod().equalsIgnoreCase("GET")) {//보내는 방식이 get일때,equalsIgnoreCase이것은 대소문자 구분 안함.
-			viewPage = processForm(); 
-		}else if(req.getMethod().equalsIgnoreCase("POST")) { //보내는 방식이 post일때,equalsIgnoreCase이것은 대소문자 구분 안함.
-			viewPage = processSubmit(req);
-		}
-		return viewPage;
-	}
-
+	@GetMapping("delete")
 	private String processForm() { //get으로 받으면 다시 회원가입 창으로 이동
 		return FORM_VIEW;
 	}
-	
-	private String processSubmit(HttpServletRequest req) throws SQLException { //post로 받으면 정상으로 폼 전송 처리
+	@PostMapping("delete")
+	private String processSubmit(HttpServletRequest req) throws SQLException, UnsupportedEncodingException { //post로 받으면 정상으로 폼 전송 처리
+		HashMapBinder hmb = new HashMapBinder(req);
 		HttpSession session = req.getSession();  
 		User user = (User) session.getAttribute("authUser");
 		String noVal = req.getParameter("no");

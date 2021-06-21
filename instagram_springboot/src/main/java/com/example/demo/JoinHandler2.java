@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.util.HashMapBinder;
 
@@ -20,34 +22,20 @@ public class JoinHandler2{
 	@Autowired(required=true)
 	private JoinService joinService = null;
 
-	@RequestMapping("join")
-	public String process(HttpServletRequest req) throws UnsupportedEncodingException, SQLException{
-		HashMapBinder hmb = new HashMapBinder(req);
-		String viewPage = null;
-		if(req.getMethod().equalsIgnoreCase("GET")) {//보내는 방식이 get일때,equalsIgnoreCase이것은 대소문자 구분 안함.
-			viewPage = processForm(); 
-		}else if(req.getMethod().equalsIgnoreCase("POST")) { //보내는 방식이 post일때,equalsIgnoreCase이것은 대소문자 구분 안함.
-			viewPage = processSubmit(req);
-		}
-		return viewPage;
-	}
-
+	@GetMapping("join")
 	private String processForm() { //get으로 받으면 다시 회원가입 창으로 이동
 		return FORM_VIEW;
 	}
 	
-	private String processSubmit(HttpServletRequest req) throws SQLException { //post로 받으면 정상으로 폼 전송 처리
-		//joinForm으로 부터 값을 다 가져온다.
-		MemberVO joinReq = new MemberVO();
-		joinReq.setId(req.getParameter("id")); //joinForm에서 name이 "id"니깐!
-		joinReq.setName(req.getParameter("name")); //joinForm에서 name이 "name"니깐!
-		joinReq.setPassword(req.getParameter("password")); //joinForm에서 name이 "password"니깐!
-		joinReq.setConfirmPassword(req.getParameter("confirmPassword")); //joinForm에서 name이 "confirmPassword"니깐!
+	@PostMapping("join")
+	private String processSubmit(MemberVO memverVO,HttpServletRequest req) throws SQLException, UnsupportedEncodingException { //post로 받으면 정상으로 폼 전송 처리
+		HashMapBinder hmb = new HashMapBinder(req);
+		String viewPage = null;
 		
 		Map<String, Boolean> errors = new HashMap<>(); //errors를 담을 map을 만들어줌.
 		req.setAttribute("errors", errors); //req에다가 errors라는 이름으로 객체 errors를 저장해두는 것임
 		
-		joinReq.validate(errors); //값이 빈값인지 아닌지 확인하는 메소드
+		memverVO.validate(errors); //값이 빈값인지 아닌지 확인하는 메소드
 
 		if(!errors.isEmpty()) { //만약에 errors안에 값이 존재하면 -빈 값이 있다는 것(혹은 비번!=확인비번)이므로 다시 회원가입 폼으로 간다.
 			return FORM_VIEW;
@@ -55,7 +43,7 @@ public class JoinHandler2{
 		
 		//errors가 비어있다면, 에러가 없다는 것이므로 로그인 화면으로 넘어 갈 준비를 한다.
 		try {
-			joinService.join(joinReq);//회원가입 dao에 값 저장하기위해서
+			joinService.join(memverVO);//회원가입 dao에 값 저장하기위해서
 			return "joinSuccess";
 		} catch (DuplicateIdException e) {
 		//그러나 만약에 이미 존재하는 아이디로 한다면 다시 회원가입 폼으로 돌아간다.

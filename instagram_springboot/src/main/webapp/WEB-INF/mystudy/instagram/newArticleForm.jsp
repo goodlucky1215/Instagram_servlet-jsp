@@ -11,7 +11,7 @@
 <body>
   <section id="main__shape">
     <!-- multipart리퀘스트라는 클래스와 매칭이 되는 하나의 타입   이걸로 여러개의 파일이 폼태그로 전달이 될 수 있다.-->
-      <form action="upload1" method="post" enctype="multipart/form-data" class="upload__shape">
+      <form action="upload" method="post" enctype="multipart/form-data" class="upload__shape">
         <div>
           파일: <input type="file" id="file__input" name="file" onchange="previewFile()"><br>
         </div>

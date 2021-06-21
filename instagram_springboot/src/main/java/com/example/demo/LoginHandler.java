@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,32 +18,20 @@ public class LoginHandler{
 	
 	@Autowired(required=true)
 	private LoginService loginservice = null;
-	@RequestMapping("loginForm")
-	public String process(HttpServletRequest req) throws Exception {
-		HashMapBinder hmb = new HashMapBinder(req);
-		ModelAndView mav = new ModelAndView();
-		String loginResult = null;
-		if(req.getMethod().equalsIgnoreCase("GET")) {
-			loginResult = processForm();
-		}
-		else if(req.getMethod().equalsIgnoreCase("POST")) {
-			loginResult = processSubmit(req);			
-		}
-		return loginResult;
-	}
-
+	@GetMapping("loginForm")
 	private String processForm() {
 		return FORM_VIEW;
 	}
-
-	private String processSubmit(HttpServletRequest req) throws Exception {
-		String id = trim(req.getParameter("id"));
-		String password = trim(req.getParameter("password"));
+	@PostMapping("loginForm")
+	private String processSubmit(MemberVO memverVO,HttpServletRequest req) throws Exception {
 		//아이디나 비밀번호 입력 확인
-		if(id == null || password == null) {
+		if(memverVO.getId()==null||memverVO.getPassword()==null) {
+			//사용자 임의로 id이름을 변경시
 			req.setAttribute("message","아이디나 비밀번호를 입력해주세요!");
 			return FORM_VIEW;
 		}
+		String id = trim(memverVO.getId());
+		String password = trim(memverVO.getPassword());
 		//둘 다 입력했다면 이제 찾기 시작
 		try {
 			User user = loginservice.login(id, password);

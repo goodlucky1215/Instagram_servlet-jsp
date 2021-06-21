@@ -3,10 +3,10 @@ package com.example.demo;
 import java.util.Map;
 
 public class MemberVO {
-	private String id;
-	private String name;
-	private String password;
-	private String confirmPassword;
+	private String id = null;
+	private String name = null;
+	private String password = null;
+	private String confirmPassword = null;
 	public String getId() {
 		return id;
 	}

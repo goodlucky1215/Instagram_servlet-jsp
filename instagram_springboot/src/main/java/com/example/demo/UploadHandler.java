@@ -7,6 +7,8 @@ import javax.swing.filechooser.FileSystemView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,11 +26,11 @@ public class UploadHandler{
 	@Autowired(required=true)
 	private FileDao filedao = null;
 	
-	@RequestMapping("upload")
+	@GetMapping("upload")
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		return "newArticleForm";
 	}
-	@RequestMapping("upload1")
+	@PostMapping("upload")
 	public String upload(HttpServletRequest req, HttpServletResponse res,@RequestParam("content")String content,@RequestParam("file") MultipartFile file) throws SQLException, IllegalStateException, IOException {
 		String rootPath = req.getServletContext().getRealPath("/upload/");
 	    System.out.println(rootPath);
