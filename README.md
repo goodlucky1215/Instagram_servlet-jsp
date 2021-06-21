@@ -5,7 +5,8 @@
 > 3. 오라클에서 데이터를 받아와서 json형태로 변환 후, 사용해보기
 > 4. 이미지(cos.jar 사용)랑 글 올리기
 > 5. 트러블 슈팅
-> 6. 배운 점
+> 6. 이관 작업 (spring, spring-boot)
+> 7. 배운 점
 ------------
 
 ### [web.xml 파일 안] 
@@ -427,6 +428,20 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
  -MultipartRequest 사용시 이미지 뿐만 아니라 다른 값들도 여기에 들어가게 됨.
  -multipartRequest.getParameter("content")을 사용해서 문제 해결.
  ```
+ 
+------------
+### [이관 작업_ver1] - Spring
+
+
+
+
+
+------------
+### [이관 작업_ver2] - Spring-Boot
+
+
+
+
 
 ------------
 
