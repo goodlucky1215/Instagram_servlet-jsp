@@ -1,30 +1,25 @@
-package com.example.demo;
-
-import java.io.IOException;
+package com.example.demo.instagram;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.util.HashMapBinder;
 
 @Controller
 @RequestMapping("/mystudy/instagram/*")
-public class LogoutHandler{
+public class IndexHandler{
 
-	@RequestMapping("logout")
-	public String process(HttpServletRequest req) throws IOException{
+	@RequestMapping("mainview")
+	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HashMapBinder hmb = new HashMapBinder(req);
-		HttpSession session = req.getSession(false);
-
-		if(session!=null) {
-			session.invalidate();
-		}
-		return "redirect:loginForm";
+		return "index";
 	}
+
 
 }

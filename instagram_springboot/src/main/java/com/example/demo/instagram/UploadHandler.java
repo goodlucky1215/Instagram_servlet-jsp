@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,14 +24,15 @@ public class LoginHandler{
 	}
 	@PostMapping("loginForm")
 	private String processSubmit(MemberVO memverVO,HttpServletRequest req) throws Exception {
+		//  사용자가 임의의 name 값을 개발자도구에서 변경시 에러가 날 수 있기 때문이다.
+		String id = memverVO.getId()!=null ? trim(memverVO.getId()) : null;
+		String password = memverVO.getPassword()!=null ? trim(memverVO.getPassword()) : null;
 		//아이디나 비밀번호 입력 확인
-		if(memverVO.getId()==null||memverVO.getPassword()==null) {
+		if(id==null||password==null) {
 			//사용자 임의로 id이름을 변경시
 			req.setAttribute("message","아이디나 비밀번호를 입력해주세요!");
 			return FORM_VIEW;
 		}
-		String id = trim(memverVO.getId());
-		String password = trim(memverVO.getPassword());
 		//둘 다 입력했다면 이제 찾기 시작
 		try {
 			User user = loginservice.login(id, password);

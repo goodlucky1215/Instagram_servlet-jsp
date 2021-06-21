@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

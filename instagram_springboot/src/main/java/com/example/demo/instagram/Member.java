@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import java.util.Date;
 
@@ -8,11 +8,10 @@ public class Member {
 	private String password;
 	private Date   regDate;
 
-	public Member(String id, String name, String password, Date date) {
+	public Member(String id, String name, String password) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
-		this.regDate = date;
 
 	}
 	public String getId() {

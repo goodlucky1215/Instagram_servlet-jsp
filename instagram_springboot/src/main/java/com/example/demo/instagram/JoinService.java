@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -14,7 +14,7 @@ public class JoinService {
 
 	public void join(MemberVO joinReq) throws SQLException {
 		memberDao.insert(
-					new Member(joinReq.getId(),joinReq.getName(),joinReq.getPassword(),new Date())
+					new Member(joinReq.getId(),joinReq.getName(),joinReq.getPassword())
 						);
 	}
 	public boolean checkid(String id) throws SQLException {

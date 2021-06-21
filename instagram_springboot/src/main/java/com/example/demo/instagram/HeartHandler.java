@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 import java.io.IOException;
 import java.io.PrintWriter;

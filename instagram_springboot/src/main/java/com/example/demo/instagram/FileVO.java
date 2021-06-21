@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.instagram;
 
 public class FileVO {
     private int fileNo; //파일번호
