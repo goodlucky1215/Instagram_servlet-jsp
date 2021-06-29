@@ -14,12 +14,4 @@ public class HashMapBinder {
 		this.request = request;
 		request.setCharacterEncoding("UTF-8");
 	}
-	public void bind(Map<String,Object> target) {
-		Enumeration en = request.getParameterNames();
-		//<input type="text" name="mem_id" 
-	      while(en.hasMoreElements()) {
-	          String key = (String)en.nextElement();
-	          target.put(key, HangulConversion.toUTF(request.getParameter(key)));//※주의!! 상수가 아닌 변수를 사용!!!
-	       }
-	    }//////end of bind
 }
