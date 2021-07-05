@@ -9,5 +9,5 @@
 	<bean id="login-service" class="member.command.LoginService">
 		<property name="memberDao" ref="member-dao" />
 	</bean>
-
+    <bean id="naver-loginapi" class="member.command.NaverLoginApi"/>
 </beans>

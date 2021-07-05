@@ -50,21 +50,16 @@ public class MemberDao {
 
 	public void insert(Member member) throws SQLException  {
 		con = ds.getConnection();
-		System.out.println("저장1");
 		String sql = "insert into jspmember values(?,?,?,?)";
-		System.out.println("저장1");
 		try(PreparedStatement pstmt = con.prepareStatement(sql)) {
-			System.out.println("저장1");
+			System.out.println("d여기니니니");
+			System.out.println(member.getId());
+			System.out.println(member.getName()); 
 			pstmt.setString(1, member.getId());	
-			System.out.println("저장1");
 			pstmt.setString(2, member.getName());	
-			System.out.println("저장1");
 			pstmt.setString(3, member.getPassword());	
-			System.out.println(member.getRegDate().getTime());
 			pstmt.setTimestamp(4, new Timestamp(member.getRegDate().getTime()));	
-			System.out.println("저장1");
 			pstmt.executeUpdate();
-			System.out.println(pstmt);
 		} catch (Exception e) {
 		}
 		
@@ -98,6 +93,26 @@ public class MemberDao {
 			
 		}	
 		return articles;
+	}
+	//네이버 아이디 존재하는지 확인
+	public String findNaverId(String email) throws SQLException {
+		con = ds.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select NVL((select MEMBERID from JSPMEMBER where MEMBERID=?),'false') as result from dual";
+		String result ="";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				result = rs.getString("result");
+			}
+		} catch(Exception e){
+			
+		}	
+		return result;
+		
 	}
 
 }

@@ -10,7 +10,6 @@
 	<!--  BeanNameUrlHandlerMapping은  name를 가져오고, 얘는 값 하나만을 가져온다 (딱 봐도 비효율적이라는거지!!)-->
 	<!--  SimpleUrlHandlerMapping은 id를 가져온다. 얘는 저렇게 prop를 여러가 갖다 쓸 수 있다. -->
 	<bean id="default-handler-mapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
-	
 	<!-- controller가져오기 -->
 	<bean id="join-controller" class="member.command.JoinHandler2">
 		<property name="methodNameResolver" ref="sns-resolver" />
@@ -23,6 +22,7 @@
 	<bean id="login-controller" class="member.command.LoginHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
 		<property name="loginService" ref="login-service" />
+		<property name="NaverLoginApi" ref="naver-loginapi" />
 	</bean>
 	<bean id="logout-controller" class="member.command.LogoutHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
@@ -34,6 +34,7 @@
 	<bean id="mainview-controller" class="member.command.IndexHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
 		<property name="loginService" ref="login-service" />
+		<property name="NaverLoginApi" ref="naver-loginapi" />
 	</bean>
 	<bean id="index-controller" class="member.command.MainVeiwHandler">
 		<property name="methodNameResolver" ref="sns-resolver" />
@@ -66,6 +67,7 @@
 				<prop key="/mystudy/instagram/join.do">join-controller</prop>
 				<prop key="/mystudy/instagram/checkid.do">checkid-controller</prop>
 				<prop key="/mystudy/instagram/login.do">login-controller</prop>
+				<prop key="/mystudy/instagram/loginNaver.do">login-controller</prop>
 				<prop key="/mystudy/instagram/logout.do">logout-controller</prop>
 				<prop key="/mystudy/instagram/upload.do">upload-controller</prop>
 				<prop key="/mystudy/instagram/mainview.do">mainview-controller</prop>
@@ -85,6 +87,7 @@
 				<prop key="/mystudy/instagram/join.do">process</prop>
 				<prop key="/mystudy/instagram/checkid.do">process</prop>
 				<prop key="/mystudy/instagram/login.do">process</prop>
+				<prop key="/mystudy/instagram/loginNaver.do">snsprocess</prop>
 				<prop key="/mystudy/instagram/logout.do">process</prop>
 				<prop key="/mystudy/instagram/upload.do">process</prop>
 				<prop key="/mystudy/instagram/mainview.do">process</prop>
@@ -96,6 +99,7 @@
 			</props>
 		</property>
 	</bean>
+	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/mystudy/instagram/" />
 		<property name="suffix" value=".jsp"/>

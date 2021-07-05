@@ -6,18 +6,34 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.util.HashMapBinder;
-
+import java.net.URLEncoder;
+import java.security.SecureRandom;
+import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 public class LoginHandler extends MultiActionController{
 	private static final String FORM_VIEW = "loginForm";
+	
 	private LoginService loginservice = null;
 	public void setLoginService(LoginService loginservice) {
 		this.loginservice = loginservice;
 	}
+	
+	private NaverLoginApi naverloginapi = null;
+	public void setNaverLoginApi(NaverLoginApi naverloginapi) {
+		this.naverloginapi = naverloginapi;
+	}
+	
 	public ModelAndView process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		HashMapBinder hmb = new HashMapBinder(req);
 		ModelAndView mav = new ModelAndView();
@@ -63,6 +79,15 @@ public class LoginHandler extends MultiActionController{
 
 	private String trim(String str) {
 		return str.trim().length() == 0 ? null:str.trim(); //문자열의 첫 시작의 공백을 제거해줌.
+	}
+	
+	
+	public String snsprocess(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		HashMapBinder hmb = new HashMapBinder(req);
+		Map<String,String> map = naverloginapi.process(); 
+	    HttpSession session = req.getSession();
+	    session.setAttribute("state", map.get("state"));
+		return "redirect:"+map.get("apiURL");
 	}
 
 }
