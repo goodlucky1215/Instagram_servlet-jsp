@@ -3,7 +3,7 @@ package member.command;
 import java.util.Date;
 
 public class Member {
-	private String id;
+	private String id=null;
 	private String name;
 	private String password;
 	private Date   regDate;
@@ -14,6 +14,9 @@ public class Member {
 		this.password = password;
 		this.regDate = date;
 
+	}
+	public Member() {
+		// TODO Auto-generated constructor stub
 	}
 	public String getId() {
 		return id;

@@ -1,9 +1,12 @@
 package member.command;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -67,7 +70,24 @@ public class LoginHandler extends MultiActionController{
 		}
 		//둘 다 입력했다면 이제 찾기 시작
 		try {
-			User user = loginservice.login(id, password);
+			Map<String,Object> map = new HashMap<>();
+			map.put("id",id);
+			map.put("password",password);
+			Cookie autoIdLogin = null;
+			if(req.getParameter("isSavedIdChecked")!=null || req.getParameter("isAutoLoginChecked")!=null) {
+				//쿠키 생성
+				autoIdLogin = new Cookie("autoIdLogin",req.getSession().getId());
+				autoIdLogin.setPath("/"); //현재 로그인 페이지 경로에 저장할 거란 거임
+				autoIdLogin.setMaxAge(60*60*24*7); //그 쿠키 날짜를 설정해둔다.
+				String sessionLimit = (new Date(System.currentTimeMillis()+(1000*60*60*24*7))).toString();//세션 만료날짜설정
+				map.put("autoIdLogin",req.getSession().getId());
+				map.put("sessionLimit",sessionLimit);
+				//ID저장과 자동로그인 => 체크 박스 체크한채로 전송시키면 on이 찍히고, 아니면 null이 찍힌다.
+				map.put("isSavedIdChecked",req.getParameter("isSavedIdChecked"));
+				map.put("isAutoLoginChecked",req.getParameter("isAutoLoginChecked"));
+			}
+			User user = loginservice.login(map);
+			if(autoIdLogin!=null)res.addCookie(autoIdLogin); //ID저장과 자동로그인  둘 중 하나가 존재한다면 쿠키값으로 저장시켜준다
 			req.getSession().setAttribute("authUser", user); //유저 아이디와 이름 저장
 			//res.sendRedirect("mainview.do");
 			return"redirect:mainview.do";

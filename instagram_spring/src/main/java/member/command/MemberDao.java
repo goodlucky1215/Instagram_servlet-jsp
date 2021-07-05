@@ -20,30 +20,36 @@ public class MemberDao {
 	public void setDataSource(DataSource ds) {
 		this.ds  = ds;
 	}
-	public Member selectById(String id) throws SQLException {
+	public Member selectById(Map<String,Object> map) throws SQLException {
 		con = ds.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select * from jspmember where memberid= ?";
-		Member member = null;
+		String sql = "select memberid,name from jspmember where memberid= ? and password= ?";
+		Member member = new Member();
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
+			pstmt.setString(1, map.get("id").toString());
+			pstmt.setString(2, map.get("password").toString());
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				member = new Member(
-						rs.getString("memberid"),
-						rs.getString("name"),
-						rs.getString("password"),
-						toDate(rs.getTimestamp("regdate"))
-						);
+				member.setId(rs.getString("memberid"));
+				member.setName(rs.getString("name"));
 			}
 		}catch(Exception e){
 			
 		}	
 		return member;
 	}
-
+	public void saveAutoIdLogin(Map<String,Object> map,String savetype) throws SQLException {
+		con = ds.getConnection();
+		String sql = "insert into jspCookie(MEMBERID,autoIdLogin,sessionLimit, savetype) values(?,?,?,?)";
+		PreparedStatement pstmt = con.prepareStatement(sql);
+		pstmt.setString(1,map.get("id").toString());
+		pstmt.setString(2,map.get("autoIdLogin").toString());
+		pstmt.setString(3,map.get("sessionLimit").toString());
+		pstmt.setString(4,savetype);
+		pstmt.executeUpdate();
+	}
 	private Date toDate(Timestamp date) {
 		return date == null ? null : new Date(date.getTime());
 	}
@@ -52,7 +58,6 @@ public class MemberDao {
 		con = ds.getConnection();
 		String sql = "insert into jspmember values(?,?,?,?)";
 		try(PreparedStatement pstmt = con.prepareStatement(sql)) {
-			System.out.println("d여기니니니");
 			System.out.println(member.getId());
 			System.out.println(member.getName()); 
 			pstmt.setString(1, member.getId());	
@@ -114,5 +119,6 @@ public class MemberDao {
 		return result;
 		
 	}
+
 
 }

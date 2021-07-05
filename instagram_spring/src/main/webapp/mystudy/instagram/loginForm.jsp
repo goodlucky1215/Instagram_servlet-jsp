@@ -20,6 +20,16 @@
 	          비밀번호<br /><input type="password" name="password" class="loginform__input">
 	        </p>
 	        <div class="error">${message}</div>
+	        <div>
+				<div>
+					<input name="isSavedIdChecked" type="checkbox" id="saveId">
+					<label for="saveId">ID 저장</label>
+				</div>
+				<div>
+					<input name="isAutoLoginChecked" type="checkbox" id="autoLogin"> 
+					<label for="autoLogin">자동로그인</label>
+				</div>
+			</div>
 	        <input type="submit" value="로그인" class="loginbtn">
 	      </div>
 	      <div id="naver__shape">
