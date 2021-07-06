@@ -434,6 +434,7 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
 + 추가된 내용 - 인터셉트 
 -  Controller로 들어가는 요청을 가로채 특정 작업을 하기 위한 용도로 사용된다.
 -  Filter는 같은 웹 어플리케이션 내에서만 접근이 가능하며, Interceptor의 경우 스프링에서 관리되기 때문에 스프링내의 모든 객체에 접근이 가능하다.
+
 인터셉트 xml파일
 ```xml
 <?xml version="1.0" encoding="UTF-8"?> <!--  ?xml => xml의 선언문  // -->
