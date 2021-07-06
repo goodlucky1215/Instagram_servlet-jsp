@@ -2,9 +2,16 @@
 <!-- beans => 클래스와 동급이다. root태그이다. // xmlns => namespace의 약자다 -->
 <!-- http://www.springframework.org/schema/beans => 유효성 검사 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
 	
+
 	<!-- 서블릿: 컨트롤 계층의 역할  -->
 	<!--  2가지 방법 -->
 	<!--  BeanNameUrlHandlerMapping은  name를 가져오고, 얘는 값 하나만을 가져온다 (딱 봐도 비효율적이라는거지!!)-->

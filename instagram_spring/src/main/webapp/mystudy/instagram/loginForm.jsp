@@ -14,7 +14,13 @@
 	      <div id="loginform__shape">
 	        <p class="loginform__title__logo">INSTAGRAM</p>
 	        <p>
-	          아이디<br /><input type="text" name="id" value="${param.id}" class="loginform__input">
+	          아이디<br />
+	          <% if(request.getAttribute("email")!=null) {%>
+	          		<input type="text" name="id" value="<%= request.getAttribute("email") %>" class="loginform__input">
+	          <% }else{ %>
+	          <input type="text" name="id" value="" class="loginform__input">
+	          <% }%>
+
 	        </p>
 	        <p>
 	          비밀번호<br /><input type="password" name="password" class="loginform__input">

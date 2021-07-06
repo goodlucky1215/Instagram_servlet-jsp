@@ -34,6 +34,18 @@ public class LoginService {
 		}
 		return new User(member.getId(),member.getName());
 	}
+	
+	//자동로그인이나 아이디 저장 존재 시
+	public Map<String,Object> autoCookieConfirm(String cookie) throws SQLException {
+		Map<String,Object> map = memberDao.autoCookieConfirm(cookie);
+		if(map.containsKey("SAVETYPE")) {
+			if("login".equals(map.get("SAVETYPE").toString())) {
+				map.put("name",memberDao.putIdName(map.get("MEMBERID").toString()));
+			}
+		}
+		return map;
+	}
+	
 	public List<Map<String, Object>> articleList(String memberId,String text) throws SQLException {
 		List<Map<String, Object>> articles = new ArrayList<>();
 		articles = memberDao.selectArticle(memberId,text);
@@ -45,6 +57,11 @@ public class LoginService {
 			Member member = new Member(email,namehan,null,new Date());
 			memberDao.insert(member);
 		};
+		
+	}
+	//자동로그인 삭제해주기
+	public void autoCookiedelete(String memberId) throws SQLException {
+		memberDao.autoCookiedelete(memberId);
 		
 	}
 }

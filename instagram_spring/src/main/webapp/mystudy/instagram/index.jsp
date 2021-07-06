@@ -28,6 +28,7 @@
 	      </div>
 	      <form action="logout.do" method="post">
 	        <input type="submit" class='btn' value="로그아웃">
+	        <input type="hidden" name="logout" value="logout" />
 	      </form>
 	      <form action="upload.do" method="get">
 	        <input type="submit" class='btn' value="글 올리기">
