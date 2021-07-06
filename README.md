@@ -431,8 +431,126 @@ private String processSubmit(HttpServletRequest req, HttpServletResponse res) {
  
 ------------
 ### [이관 작업_ver1] - Spring
++ 추가된 내용 - 인터셉트 
+-  Controller로 들어가는 요청을 가로채 특정 작업을 하기 위한 용도로 사용된다.
+-  Filter는 같은 웹 어플리케이션 내에서만 접근이 가능하며, Interceptor의 경우 스프링에서 관리되기 때문에 스프링내의 모든 객체에 접근이 가능하다.
+인터셉트 xml파일
+```xml
+<?xml version="1.0" encoding="UTF-8"?> <!--  ?xml => xml의 선언문  // -->
+<!-- beans => 클래스와 동급이다. root태그이다. // xmlns => namespace의 약자다 -->
+<!-- http://www.springframework.org/schema/beans => 유효성 검사 -->
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" <!-- 인터셉트는 xml이 이부분이 다름-->
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+    
+    <interceptors> <!-- 인터셉트를 담는 통 -->
+       <interceptor> <!-- 여기에 mapping될 url과 적용될 인터셉트 클래스 파일을 가져온다 -->
+						<!-- 매핑 될 URL -->
+           <mapping path="/mystudy/instagram/login.do"/>
+           <mapping path="/mystudy/instagram/logout.do"/>
+						<!-- 인터셉트 클래스 파일 -->
+           <beans:bean  class="member.command.AuthenticationInterceptor" >
+						<!-- 의존성 주입이 되는 클래스(setter주입) -->
+      			<beans:property name="loginService" ref="login-service" />
+    	  </beans:bean>
+       </interceptor>
+    </interceptors>
+    
+       
+</beans:beans>
+```
+인터셉트 클래스
+```java
+package member.command;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+//로그인 처리 인터셉터
+public class AuthenticationInterceptor implements HandlerInterceptor {
+	private LoginService loginservice = null;
+	public void setLoginService(LoginService loginservice) {
+		this.loginservice = loginservice;
+	}
+	
+	//preHandle()은 컨트롤러보다 먼저 수행되는 메서드
+  //true면 컨트롤러를 실행시키고, false면 컨트롤러를 실행시키지 않는다.
+	@Override
+	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler)throws Exception {
+		//쿠키에서 autoIdLogin에서 존재한다면 자동로그인이나 아이디 저장
+		Cookie[] cookies = null;
+		cookies = req.getCookies();
+	    Map<String, Object> map = new HashMap<>();
+	    if(cookies!=null) {
+		for(Cookie cookie:cookies) {
+			if("autoIdLogin".equals(cookie.getName())) {
+				//로그아웃 상황 일때는 그 쿠키값이 존재한다면 그것을 삭제
+				if(req.getParameter("logout")!=null) {
+					User user = (User) req.getSession().getAttribute("authUser");
+					loginservice.autoCookiedelete(user.getId());
+					Cookie cookie1 = new Cookie("autoIdLogin",null);
+					cookie1.setMaxAge(0);
+					res.addCookie(cookie1);
+					return true;
+				}
+				//로그인 상황일때는 그 멤버의 정보를 저장해옴				
+				else {
+					map = loginservice.autoCookieConfirm(cookie.getValue());
+				}
+				break;
+			}
+		}}
+	    //자동로그인이 아님+로그아웃 할 것이라면 그냥 로그아웃해주기
+	    if(req.getParameter("logout")!=null) {
+			return true;
+		}
+		//만약 유효한 쿠키가 존재한다면
+		if(map.containsKey("SAVETYPE")) {
+			System.out.println("여기오니");
+			if("login".equals(map.get("SAVETYPE").toString())) {
+				System.out.println("여기오니1");
+				User user = new User(map.get("MEMBERID").toString(),map.get("name").toString());
+				req.getSession().setAttribute("authUser", user); //세션에 정보를 담아서
+				res.sendRedirect("mainview.do"); //전송
+			}
+			else if("id".equals(map.get("SAVETYPE").toString())) {
+				System.out.println("여기오니2");
+				req.setAttribute("email", map.get("MEMBERID").toString());
+			}
+		}
+		return true;
+	}
+
+//view페이지가 렌더링 되고 난 후
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+// 컨트롤러 메서드 실행직 후 view페이지 렌더링 되기 전
+	@Override
+	public void postHandle	(HttpServletRequest req, HttpServletResponse res, Object handler,
+			ModelAndView modelAndView) 
+			throws Exception {
+		// TODO Auto-generated method stub
+	}
+}
+```
 
 
 
