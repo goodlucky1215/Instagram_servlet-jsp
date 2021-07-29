@@ -23,6 +23,7 @@ public class checkidHandler extends MultiActionController {
 		PrintWriter out = res.getWriter();
 		String id = req.getParameter("id");
 		boolean boolId = joinService.checkid(id);
+		System.out.println(boolId);
 		if(boolId==true) out.print("usable");
 		else out.print("able");	
 	}

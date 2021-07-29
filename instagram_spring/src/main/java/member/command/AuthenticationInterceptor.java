@@ -49,15 +49,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 		//만약 유효한 쿠키가 존재한다면
 		if(map.containsKey("SAVETYPE")) {
-			System.out.println("여기오니");
 			if("login".equals(map.get("SAVETYPE").toString())) {
-				System.out.println("여기오니1");
 				User user = new User(map.get("MEMBERID").toString(),map.get("name").toString());
 				req.getSession().setAttribute("authUser", user); //세션에 정보를 담아서
 				res.sendRedirect("mainview.do"); //전송
 			}
 			else if("id".equals(map.get("SAVETYPE").toString())) {
-				System.out.println("여기오니2");
 				req.setAttribute("email", map.get("MEMBERID").toString());
 			}
 		}

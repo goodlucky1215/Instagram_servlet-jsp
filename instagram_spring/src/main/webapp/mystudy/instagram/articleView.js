@@ -38,7 +38,8 @@ function showHeroes(jsonObj) {
 	articlehref.href = `read.do?no=${jsonObj[i]['fileNo']}`;
     let articlesimg = document.createElement('img');
     articlesimg.className="src";
-    articlesimg.src=`/upload/${jsonObj[i]['fileName']}`;
+let file = "C:\\workspace_java80\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\instagram_spring\\upload\\";
+    articlesimg.src="\\upload\\"+`${jsonObj[i]['fileName']}`;
     articlesimg.className="articles__img";
     let articlesbottom = document.createElement('div');
     articlesbottom.className="articles__bottom";

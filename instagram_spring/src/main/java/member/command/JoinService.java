@@ -15,7 +15,7 @@ public class JoinService {
 						);
 	}
 	public boolean checkid(String id) throws SQLException {
-		Member member = null;
+		String member = null;
 		member = memberDao.selectByJoin(id); //이미 그 아이디가 존재하는지 확인
 		if(member==null) { //이 아이디가 존재하지 않는 다는 것
 			return true;
